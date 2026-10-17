@@ -189,18 +189,30 @@ check_start_hours <- function(start_hours) {
 #' @param service_log Optional data frame (`BIKEID`, `service_time`) of previous maintenance events.
 #' @param interval_min Snapshot spacing in minutes (default: 5).
 #' @param start_hours Optional data frame (`BIKEID`, `start_hours`) of initial usage offsets.
-#' @return Data frame with columns `BIKEID`, `ride_hours`, `due`, `due_at`, and `current_dock`.
+#' @param assume_service_h Assumed hard service point in ride hours (default: 70). Once a
+#'   bike accumulates this many ride hours it is assumed to have been serviced, and its
+#'   hours restart from zero. This stops every bike from showing as due forever when the
+#'   data spans a long period. Use `NULL` to disable. Has no effect on a bike that is
+#'   never due before this point, and a bike is never due if `service_interval_h` is at
+#'   or above this value.
+#' @return Data frame with columns `BIKEID`, `ride_hours` (hours since the last service,
+#'   real or assumed), `due`, `due_at`, and `current_dock`.
 #' @export
 service_status <- function(
     data,
     service_interval_h,
     service_log = NULL,
     interval_min = 5,
-    start_hours = NULL
+    start_hours = NULL,
+    assume_service_h = 70
 ) {
   if (missing(service_interval_h) || !is.numeric(service_interval_h) ||
       length(service_interval_h) != 1 || is.na(service_interval_h) || service_interval_h <= 0) {
     stop("service_interval_h is required: a positive number of ride hours between services")
+  }
+  if (!is.null(assume_service_h) && (!is.numeric(assume_service_h) ||
+      length(assume_service_h) != 1 || is.na(assume_service_h) || assume_service_h <= 0)) {
+    stop("assume_service_h must be NULL or a positive number of ride hours")
   }
 
   if (nrow(data) == 0) {
@@ -250,9 +262,17 @@ service_status <- function(
   }
 
   limit_min <- service_interval_h * 60
+  # Assumed service: every `assume_service_h` of use resets the counter, so only the
+  # current cycle decides whether a bike is due now.
+  auto_min <- if (is.null(assume_service_h)) Inf else assume_service_h * 60
   usage <- data %>%
     group_by(BIKEID) %>%
-    mutate(ride_min = offset_min + cumsum(DOCID == "0") * interval_min) %>%
+    mutate(
+      total_min = offset_min + cumsum(DOCID == "0") * interval_min,
+      cycle = if (is.finite(auto_min)) floor((total_min + 1e-9) / auto_min) else 0,
+      ride_min = if (is.finite(auto_min)) total_min - cycle * auto_min else total_min
+    ) %>%
+    filter(cycle == max(cycle)) %>%
     summarise(
       ride_hours = max(ride_min) / 60,
       due_at = time[which(ride_min >= limit_min - 1e-9)[1]],
@@ -318,9 +338,11 @@ station_service_priority <- function(
     service_interval_h,
     service_log = NULL,
     interval_min = 5,
-    start_hours = NULL
+    start_hours = NULL,
+    assume_service_h = 70
 ) {
-  status <- service_status(data, service_interval_h, service_log, interval_min, start_hours)
+  status <- service_status(data, service_interval_h, service_log, interval_min, start_hours,
+                           assume_service_h)
   rank_stations(status, service_interval_h)
 }
 
@@ -383,9 +405,11 @@ dispatch_recommendation <- function(
     threshold_min = 90,
     service_log = NULL,
     interval_min = 5,
-    start_hours = NULL
+    start_hours = NULL,
+    assume_service_h = 70
 ) {
-  status <- service_status(data, service_interval_h, service_log, interval_min, start_hours)
+  status <- service_status(data, service_interval_h, service_log, interval_min, start_hours,
+                           assume_service_h)
   list(
     stuck_alerts = maintenance_alerts(data, threshold_min = threshold_min, interval_min = interval_min),
     service_due  = status %>% filter(due),

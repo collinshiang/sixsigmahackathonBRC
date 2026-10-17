@@ -56,7 +56,7 @@ bikesmart/
 - `pc_parse_time(x)`: Internal ISO-8601 parser for P-chart time logs.
 
 #### D. Maintenance Fleet Dispatch & Anomaly Detection (`maintenance_qc.R`)
-- `service_status(data, service_interval_h, service_log = NULL, ...)`: Accumulates ride hours per bike and flags whether a bike is due for preventive maintenance (`due = TRUE`) and the exact timestamp (`due_at`).
+- `service_status(data, service_interval_h, service_log = NULL, ..., assume_service_h = 70)`: Accumulates ride hours per bike (assuming a bike is serviced and its hours restart after `assume_service_h` = 70 h of use, so not every bike shows as due) and flags whether a bike is due for preventive maintenance (`due = TRUE`) and the exact timestamp (`due_at`).
 - `maintenance_alerts(data, threshold_min = 90, ...)`: Flags bikes currently away from any dock past a duration threshold (e.g., 90 min) indicating abandonment, theft, or breakdown.
 - `station_service_priority(data, service_interval_h, ...)`: Ranks stations by the number of docked due bikes (`n_due`) and cumulative overdue hours to maximize mobile van service efficiency.
 - `simulate_start_hours(bike_ids, service_interval_h, seed = 42)`: Generates uniform staggered initial ride hours (0 to $x$) so fleet maintenance cycles do not artificially synchronize.

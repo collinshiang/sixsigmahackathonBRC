@@ -85,3 +85,22 @@ stopifnot(
 
 cat("PASS test-maintenance-qc: transit runs, alerts, service status, van priorities, and dispatch unified output verified.\n")
 
+
+test_that("service_status assumes service after assume_service_h and restarts the count", {
+  # 1 bike, in transit for 15 snapshots at 5 min = 1.25 h total
+  d <- data.frame(
+    BIKEID = "A",
+    DOCID = "0",
+    time = format(as.POSIXct("2026-09-16 00:00:00", tz = "UTC") + 300 * (0:14), "%Y-%m-%d %H:%M:%S"),
+    stringsAsFactors = FALSE
+  )
+  # interval 0.5 h, assumed service at 1 h: reset at 12 snapshots, 3 left = 0.25 h, not due
+  s <- service_status(d, service_interval_h = 0.5, assume_service_h = 1)
+  expect_equal(s$ride_hours, 0.25)
+  expect_false(s$due)
+  # disabled: stays due forever
+  s0 <- service_status(d, service_interval_h = 0.5, assume_service_h = NULL)
+  expect_equal(s0$ride_hours, 1.25)
+  expect_true(s0$due)
+  expect_error(service_status(d, service_interval_h = 0.5, assume_service_h = -1))
+})
