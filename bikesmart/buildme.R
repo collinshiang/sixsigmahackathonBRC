@@ -14,7 +14,7 @@
 
 # --- 0. Point R at the package directory ----------------------------------
 # Change this path if your repo is in a different location.
-PKG_DIR <- "deliverables/bikesmart"
+PKG_DIR <- "bikesmart"
 setwd(PKG_DIR)
 
 # --- 1. Unload and remove any previously installed version ---------------

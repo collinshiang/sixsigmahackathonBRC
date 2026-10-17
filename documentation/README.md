@@ -22,12 +22,12 @@ Welcome to the comprehensive documentation suite for **BikeSmart**, developed by
 ### Load the R Package
 ```r
 # From repository root
-devtools::load_all("deliverables/bikesmart")
+devtools::load_all("bikesmart")
 ```
 
 ### Run All Verification Tests
 ```bash
-Rscript deliverables/bikesmart/tests/test_all.R
+Rscript bikesmart/tests/test_all.R
 ```
 
 All 5 test suites (known-answer hand calculations, edge cases, and degenerate inputs) pass with zero errors.

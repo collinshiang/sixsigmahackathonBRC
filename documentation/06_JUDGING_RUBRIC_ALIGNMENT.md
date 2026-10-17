@@ -9,12 +9,12 @@
 
 | Rubric Criterion | Max Pts | How BikeSmart Achieves Full Marks | Direct Evidence / File Reference |
 |---|:---:|---|---|
-| **1. Effective, Working Tool** | **25** | The entire `bikesmart` R package builds, loads, and executes flawlessly. All 5 unit test suites pass with 0 errors. | `deliverables/bikesmart/tests/test_all.R`, `buildme.R` |
+| **1. Effective, Working Tool** | **25** | The entire `bikesmart` R package builds, loads, and executes flawlessly. All 5 unit test suites pass with 0 errors. | `bikesmart/tests/test_all.R`, `buildme.R` |
 | **2. Performs Valid QC Analysis** | **25** | Implements Montgomery Attribute SPC P-charts with dynamic 3-sigma limits; failure-function rate integration (*SIGMA* Ch. 8); and Rolled Throughput Yield reliability modeling. | `pchart.R`, `dock_projection.R`, `failure_factor.R`, `05_STATISTICAL_FOUNDATIONS_AND_FORMULAS.md` |
 | **3. Scope Match** | **5** | Directly addresses the **Urban Systems** prompt: micro-mobility rebalancing, preventive maintenance routing, and system quality control. | `01_PROJECT_PURPOSE_AND_USERS.md`, `SPEC.md` |
 | **4. Clear Use Case** | **5** | Concrete user personas (commuters, maintenance van drivers, fleet quality managers) with specific decision workflows. | `01_PROJECT_PURPOSE_AND_USERS.md` |
 | **5. Clear, Minimal Requirements** | **5** | Riders enter only location & intent (pickup vs return); van crew runs one single command; relies only on standard 3-column logs (`BIKEID`, `DOCID`, `time`). | `01_PROJECT_PURPOSE_AND_USERS.md`, `03_CITY_ONBOARDING_AND_INPUT_REQUIREMENTS.md` |
-| **6. Demonstration** | **10** | End-to-end demonstrations illustrating commuter flow predictions, van prioritization, P-chart in-control vs out-of-control states, and stuck-bike alerts. | `04_TEST_DATASETS_AND_DEMONSTRATIONS.md`, `deliverables/bikesmart/README.md` |
+| **6. Demonstration** | **10** | End-to-end demonstrations illustrating commuter flow predictions, van prioritization, P-chart in-control vs out-of-control states, and stuck-bike alerts. | `04_TEST_DATASETS_AND_DEMONSTRATIONS.md`, `bikesmart/README.md` |
 | **7. Documentation** | **10** | Comprehensive multi-page documentation portal detailing every function, parameter, type, default, return value, mathematical formula, and step-by-step onboarding guide. | `documentation/` portal (6 core guides), `.Rd` manuals in `man/` |
 | **8. Test Datasets** | **5** | 3 complete, accurate urban test datasets (Jersey City, Milwaukee, Tampa) with 8,640 snapshots, road networks, zoning, and station coordinates. | `data/` and `test_datasets/` (`jersey_city`, `milwaukee`, `tampa`) |
 | **9. Dataset Explainers** | **5** | Complete variable codebook, coordinate reference systems, timezone metadata, and OSM provenance documented in detail. | `04_TEST_DATASETS_AND_DEMONSTRATIONS.md`, `test_datasets/README.md`, `data/README.md` |
@@ -27,7 +27,7 @@
 
 ### 1. Effective, Working Tool (25/25 pts)
 - Package is structured according to official CRAN standards: `DESCRIPTION`, `NAMESPACE`, `R/`, `man/`, `tests/`.
-- Executing `Rscript deliverables/bikesmart/tests/test_all.R` runs all tests:
+- Executing `Rscript bikesmart/tests/test_all.R` runs all tests:
   - `test-availability.R`: PASS
   - `test-dock-projection.R`: PASS
   - `test-failure-factor.R`: PASS

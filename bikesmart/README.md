@@ -75,10 +75,10 @@ bikesmart/
 
 ```r
 # Option 1: Load during development (from repo root)
-devtools::load_all("deliverables/bikesmart")
+devtools::load_all("bikesmart")
 
 # Option 2: Build and install local package tarball
-# R CMD build deliverables/bikesmart
+# R CMD build bikesmart
 # R CMD INSTALL bikesmart_0.1.0.tar.gz
 library(bikesmart)
 ```
@@ -197,6 +197,6 @@ print(usable_bikes)
 
 To execute all unit tests across all 5 test suites:
 ```bash
-Rscript deliverables/bikesmart/tests/test_all.R
+Rscript bikesmart/tests/test_all.R
 ```
 All tests verify known-answer hand calculations, boundary conditions, and degenerate cases.

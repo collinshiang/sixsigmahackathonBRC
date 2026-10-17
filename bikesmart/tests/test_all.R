@@ -2,7 +2,10 @@
 # Can be run directly from repo root or deliverables/bikesmart
 library(dplyr)
 
-if (file.exists("deliverables/bikesmart/R")) {
+if (file.exists("bikesmart/R")) {
+  pkg_r <- "bikesmart/R"
+  test_dir <- "bikesmart/tests/testthat"
+} else if (file.exists("deliverables/bikesmart/R")) {
   pkg_r <- "deliverables/bikesmart/R"
   test_dir <- "deliverables/bikesmart/tests/testthat"
 } else if (file.exists("R")) {
