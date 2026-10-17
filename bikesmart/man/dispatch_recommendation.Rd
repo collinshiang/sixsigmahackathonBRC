@@ -10,7 +10,8 @@ dispatch_recommendation(
   threshold_min = 90,
   service_log = NULL,
   interval_min = 5,
-  start_hours = NULL
+  start_hours = NULL,
+  assume_service_h = 70
 )
 }
 \arguments{
@@ -25,6 +26,7 @@ dispatch_recommendation(
 \item{interval_min}{Snapshot spacing in minutes (default: 5).}
 
 \item{start_hours}{Optional data frame (\code{BIKEID}, \code{start_hours}) of initial usage offsets.}
+\item{assume_service_h}{Assumed hard service point in ride hours (default: 70). Once a bike accumulates this many ride hours it is assumed to have been serviced and its hours restart from zero, so bikes do not stay due forever on long data spans. Use \code{NULL} to disable.}
 }
 \value{
 A named list containing:
