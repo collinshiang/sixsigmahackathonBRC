@@ -1,0 +1,99 @@
+# =============================================================================
+# Deploy BikeSmart Rider UI to Posit Connect as a STATIC site.
+# =============================================================================
+name: Deploy BikeSmart UI to Posit Connect
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'bikesmart-ui/**'
+      - 'data/**'
+      - 'tools/**'
+      - '.github/workflows/deploy-ui.yml'
+      - '.github/scripts/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-bikesmart-ui
+  cancel-in-progress: false
+
+env:
+  APP_DIR: 'bikesmart-ui'
+  CONTENT_NAME: 'bikesmart-ui'
+  CONTENT_TITLE: 'BikeSmart Rider Platform'
+  CONTENT_GUID: 'a806618c-0404-464a-923e-d20ed0427031'
+  NODE_VERSION: '22'
+  VITE_API_BASE: ''
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Check the app folder
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          test -f package.json      || { echo "::error::No package.json in ${APP_DIR}. Set APP_DIR at the top of this file."; exit 1; }
+          test -f package-lock.json || { echo "::error::No package-lock.json in ${APP_DIR}. Run npm install on your machine and commit package-lock.json."; exit 1; }
+          jq -e '.scripts.build' package.json >/dev/null || { echo "::error::package.json has no \"build\" script."; exit 1; }
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: ${{ env.APP_DIR }}/package-lock.json
+
+      - name: Build (npm ci && npm run build)
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run build -- --base=./
+          test -f dist/index.html || { echo "::error::The build did not produce dist/index.html."; exit 1; }
+
+      - name: Check the two repo secrets exist
+        env:
+          CONNECT_SERVER: ${{ secrets.CONNECT_SERVER }}
+          CONNECT_API_KEY: ${{ secrets.CONNECT_API_KEY }}
+        run: |
+          [ -n "$CONNECT_SERVER" ]  || { echo "::error::Repo secret CONNECT_SERVER is not set (Settings > Secrets and variables > Actions)."; exit 1; }
+          [ -n "$CONNECT_API_KEY" ] || { echo "::error::Repo secret CONNECT_API_KEY is not set (Settings > Secrets and variables > Actions)."; exit 1; }
+          echo "Both secrets are present."
+
+      - name: Publish dist/ to Posit Connect
+        id: publish
+        timeout-minutes: 10
+        env:
+          CONNECT_SERVER: ${{ secrets.CONNECT_SERVER }}
+          CONNECT_API_KEY: ${{ secrets.CONNECT_API_KEY }}
+          BUNDLE_DIR: ${{ env.APP_DIR }}/dist
+          CONTENT_NAME: ${{ env.CONTENT_NAME }}
+          CONTENT_TITLE: ${{ env.CONTENT_TITLE }}
+          CONTENT_GUID: ${{ env.CONTENT_GUID }}
+          POLL_BUDGET_SECONDS: '120'
+        run: bash .github/scripts/connect-publish-static-async.sh
+
+      - name: Check the site answers (green is not live)
+        env:
+          CONNECT_API_KEY: ${{ secrets.CONNECT_API_KEY }}
+          CONTENT_URL: ${{ steps.publish.outputs.content_url }}
+        run: |
+          set -euo pipefail
+          echo "Checking ${CONTENT_URL}"
+          for i in $(seq 1 12); do
+            CODE=$(curl -sS -L -o /dev/null -w '%{http_code}' -H "Authorization: Key ${CONNECT_API_KEY}" "$CONTENT_URL" || echo 000)
+            echo "  attempt ${i}: HTTP ${CODE}"
+            if [ "$CODE" = "200" ]; then echo "LIVE: ${CONTENT_URL}"; exit 0; fi
+            sleep 10
+          done
+          echo "::error::The site never answered 200. Open it in Connect and read its Logs tab."
+          exit 1
+
