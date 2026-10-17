@@ -1,29 +1,27 @@
 Package: bikesmart
 Version: 0.1.0
-Date: 2026-10-16
-Title: Bike Dock Availability and Recommendation Tool
+Date: 2026-10-17
+Title: Bike-Share Quality Control, Predictive Dock Balancing, and Maintenance Analytics
 Authors@R: c(
-  person("Firstname1", "Lastname1", email = "fl1@cornell.edu", role = c("aut", "cre")),
-  person("Firstname2", "Lastname2", email = "fl2@cornell.edu", role = "aut"),
-  person("Firstname3", "Lastname3", email = "fl3@cornell.edu", role = "aut"),
-  person("Firstname4", "Lastname4", email = "fl4@cornell.edu", role = "aut"),
-  person("Firstname5", "Lastname5", email = "fl5@cornell.edu", role = "aut") )
-Author: Firstname1 Lastname1 [aut, cre],
-  Firstname2 Lastname2 [aut],
-  Firstname3 Lastname3 [aut],
-  Firstname4 Lastname4 [aut],
-  Firstname5 Lastname5 [aut]
-Maintainer: Firstname1 Lastname1 <fl1@cornell.edu>
-Description: Tools for analyzing simulated bike-share dock snapshots. Given
-    a time-series of bike locations, the package computes dock availability
-    probabilities, pairwise dock distances, and recommends optimal pickup and
-    drop-off docks for a rider's trip. Designed for the Cornell Six Sigma
-    Hackathon Urban Systems prompt (Big Red Crew, Oct 2026).
+  person("Big Red Crew", email = "sixsigma@cornell.edu", role = c("aut", "cre")) )
+Author: Big Red Crew [aut, cre]
+Maintainer: Big Red Crew <sixsigma@cornell.edu>
+Description: Comprehensive quality control, reliability analysis, and predictive
+    rebalancing toolkit for micro-mobility bike-share networks. Provides tools
+    for: (1) calculating arrival-time dock inventory projections and distance-based
+    recommendations with rebalancing incentives; (2) modeling usable fleet reliability
+    using multiplicative failure factors (rolled throughput survival); (3) attribute
+    Statistical Process Control (P-chart) with sample-size-dependent 3-sigma limits
+    to monitor fleet defect rates; and (4) operational maintenance dispatch ranking
+    and stuck-bike anomaly detection. Developed for the Cornell Six Sigma Hackathon.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Depends: R (>= 4.0.0)
+Depends:
+    R (>= 4.0.0)
 Imports:
-  dplyr (>= 1.1.4)
-
+    dplyr (>= 1.1.4)
+Suggests:
+    ggplot2,
+    testthat (>= 3.0.0)

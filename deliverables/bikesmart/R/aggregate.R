@@ -57,6 +57,12 @@
 #' dock_data <- aggregate_snapshots(movement, stations)
 #' head(dock_data)
 #' }
+# ------------------------------------------------------------------------------
+# aggregate_snapshots
+# ------------------------------------------------------------------------------
+# Short description: Collapses raw bike-level snapshot logs into dock-level
+# counts of docked bikes at each time step.
+
 aggregate_snapshots <- function(snapshots, stations,
                                 default_capacity = 30L) {
   # --- input checks --------------------------------------------------------

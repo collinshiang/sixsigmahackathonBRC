@@ -56,6 +56,12 @@
 #' get_bike_availability(b0 = 5, lam_out = 0, lam_in = 0)
 #' # With 0 bikes and no flow, impossible
 #' get_bike_availability(b0 = 0, lam_out = 0, lam_in = 0)
+# ------------------------------------------------------------------------------
+# get_bike_availability
+# ------------------------------------------------------------------------------
+# Short description: Calculates the Poisson probability that at least one bike
+# will be available at a dock upon rider arrival given current inventory and expected flows.
+
 get_bike_availability <- function(b0, lam_out, lam_in) {
   # --- input validation ----------------------------------------------------
   stopifnot(
@@ -122,6 +128,12 @@ get_bike_availability <- function(b0, lam_out, lam_in) {
 #' get_slot_availability(b0 = 5, capacity = 10, lam_out = 1, lam_in = 1)
 #' # Full dock (b0 == capacity), nothing leaving → no slot available
 #' get_slot_availability(b0 = 10, capacity = 10, lam_out = 0, lam_in = 0)
+# ------------------------------------------------------------------------------
+# get_slot_availability
+# ------------------------------------------------------------------------------
+# Short description: Calculates the Poisson probability that at least one open
+# docking slot will be available at a dock upon rider arrival.
+
 get_slot_availability <- function(b0, capacity, lam_out, lam_in) {
   # --- input validation ----------------------------------------------------
   stopifnot(

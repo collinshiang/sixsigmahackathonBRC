@@ -63,6 +63,11 @@
 #' # Distance between two specific docks (one pair)
 #' dock_distances(grid, from = "Hamilton Park", to = "Grove St PATH")
 #' }
+# ------------------------------------------------------------------------------
+# dock_distances
+# ------------------------------------------------------------------------------
+# Short description: Filters and looks up road network distances between dock pairs.
+
 dock_distances <- function(distance_grid,
                             from      = NULL,
                             to        = NULL,

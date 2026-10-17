@@ -1,128 +1,202 @@
-# bikesmart
+# bikesmart: Bike-Share Quality Control, Predictive Dock Balancing & Fleet Reliability
 
-> R package — Bike Dock Availability and Recommendation Tool  
-> Cornell Six Sigma Hackathon, Big Red Crew, October 2026
-
----
-
-## What it does
-
-`bikesmart` analyzes simulated bike-share snapshots and tells a rider:
-
-- **Where to pick up a bike** — the closest dock with a high probability of having a bike available when you arrive.
-- **Where to drop off a bike** — the closest dock near your destination with a high probability of having an open slot.
-
-The package works directly on the raw three-column snapshot data produced by `simulate_data.R` (`BIKEID`, `DOCID`, `time`). An internal helper aggregates those rows to dock-level counts before computing probabilities.
+> **Big Red Crew** — Cornell Six Sigma Hackathon, October 2026  
+> An integrated R package for predictive micro-mobility fleet management, statistical quality control, and rebalancing optimization.
 
 ---
 
-## Functions
+## 1. Overview & Capabilities
 
-| Function | What it does |
-|---|---|
-| `aggregate_snapshots(snapshots, stations)` | Collapses raw per-bike rows into one row per dock per snapshot with a `bikes` count. First step before any analysis. |
-| `get_bike_availability(b0, lam_out, lam_in)` | Returns P(at least one bike present) when the rider arrives, given current bike count and Poisson flow rates. |
-| `get_slot_availability(b0, capacity, lam_out, lam_in)` | Returns P(at least one open slot) for a rider returning their bike. |
-| `dock_distances(distance_grid, from, to, max_miles)` | Filters the pre-computed pairwise distance matrix to find nearby docks. |
-| `recommend_dock(candidates, threshold)` | Picks the closest dock meeting a probability threshold; falls back to best available. |
+`bikesmart` packages the core analytical and quality engineering components developed by the Big Red Crew into a modular, production-ready R package. The package addresses both sides of the micro-mobility challenge:
+1. **Rider Experience & Predictive Rebalancing:** Accurate forecast of dock availability at arrival time, road distance ranking, and incentive pricing to encourage rider-driven system rebalancing.
+2. **Fleet Quality Control & Reliability:** Multiplicative defect survival modeling (Rolled Throughput Yield), Statistical Process Control attribute P-charts with dynamic 3-sigma limits, and operational maintenance dispatch optimization with stuck-bike anomaly detection.
 
 ---
 
-## Install and load
-
-```r
-# From the built tarball (after running buildme.R)
-install.packages("bikesmart_0.1.0.tar.gz", type = "source", repos = NULL)
-library("bikesmart")
-
-# Or load temporarily during development (no install needed)
-devtools::load_all("deliverables/bikesmart")
-```
-
----
-
-## Quick example
-
-```r
-library("bikesmart")
-
-# Load the Jersey City data (produced by simulate_data.R)
-movement <- readRDS("data/jersey_city.rds")
-stations <- read.csv("data/stations/jersey_city.csv", colClasses = "character")
-grid     <- read.csv("data/distances/jersey_city.csv",
-                      colClasses = c("character", "character", "numeric"))
-
-# Step 1: aggregate raw snapshots to dock level
-# Pick one timestamp (e.g. 8 AM on a weekday) as the "now" state
-now <- as.POSIXct("2026-09-21 08:00:00", tz = "America/New_York")
-dock_counts <- aggregate_snapshots(
-  movement[movement$time == now, ],
-  stations
-)
-
-# Step 2: find nearby docks (within 0.5 miles of "Hamilton Park")
-nearby <- dock_distances(grid, from = "Hamilton Park", max_miles = 0.5)
-
-# Step 3: for each nearby dock, compute availability probability
-# (Flow rates lam_out and lam_in would come from your teammates'
-# projection functions; using illustrative values here.)
-candidates <- data.frame(
-  dock_id = nearby$dockID2,
-  minutes = nearby$distance / 0.05,   # rough: 0.05 miles/min walking
-  p       = mapply(function(d) {
-    b0 <- dock_counts$bikes[dock_counts$DOCID == d]
-    if (length(b0) == 0) return(NA_real_)
-    get_bike_availability(b0 = b0, lam_out = 1.2, lam_in = 0.8)
-  }, nearby$dockID2)
-)
-
-# Step 4: recommend the best dock
-recommend_dock(candidates, threshold = 0.90)
-```
-
----
-
-## Build from source
-
-```r
-# From the repository root:
-source("deliverables/bikesmart/buildme.R")
-```
-
-See [`buildme.R`](buildme.R) for the full step-by-step workflow.
-
----
-
-## Adding new functions
-
-1. Add your function to an existing `R/*.R` file (if it fits thematically) or create a new `R/myfeature.R`.
-2. Add roxygen2 tags (`@param`, `@return`, `@export`, etc.) above the function — see the existing functions as a template.
-3. Run `devtools::document("deliverables/bikesmart")` — it regenerates `NAMESPACE` and `man/` automatically.
-4. Add the function name to the `export(...)` list in `NAMESPACE` if `devtools::document()` did not do so automatically.
-5. Write a test in `tests/` (testthat) and verify it passes before merging.
-
----
-
-## Package structure
+## 2. Package Architecture & Functions
 
 ```
-deliverables/bikesmart/
-├── DESCRIPTION          # package metadata, authors, dependencies
-├── NAMESPACE            # exported functions and imports (auto-generated)
-├── LICENSE              # MIT
-├── .Rbuildignore        # files excluded from the built tarball
-├── buildme.R            # developer workflow (document → load → test → build)
-├── README.md            # this file
+bikesmart/
 ├── R/
-│   ├── aggregate.R      # aggregate_snapshots(): raw rows → dock counts
-│   ├── availability.R   # get_bike_availability(), get_slot_availability()
-│   ├── distances.R      # dock_distances()
-│   └── recommend.R      # recommend_dock()
-└── man/
-    ├── aggregate_snapshots.Rd
-    ├── get_bike_availability.Rd
-    ├── get_slot_availability.Rd
-    ├── dock_distances.Rd
-    └── recommend_dock.Rd
+│   ├── dock_projection.R  # Arrival forecasting, rates, return discounts & dock ranking
+│   ├── failure_factor.R   # Usable fleet reliability, defect breakdown & scaling
+│   ├── pchart.R           # SPC P-chart statistics, control limits & visualization
+│   ├── maintenance_qc.R   # Maintenance dispatch, stuck alerts & station priority
+│   ├── availability.R     # Poisson probability functions for bike/slot availability
+│   ├── recommend.R        # Threshold-based dock recommendation rule
+│   ├── aggregate.R        # Collapses 5-min movement logs to dock-level counts
+│   └── distances.R        # Distance lookup and filtering
+├── tests/
+│   ├── testthat/          # Comprehensive unit test suites (known-answer & edge cases)
+│   └── test_all.R         # Test runner verifying all package functionalities
+├── man/                   # Standard R documentation (.Rd) manual pages
+├── DESCRIPTION            # Package metadata, dependencies (dplyr) & suggestions
+└── NAMESPACE              # Public exported function interface
 ```
 
+### Exported Functions Reference
+
+#### A. Predictive Dock Projection & Optimization (`dock_projection.R`)
+- `compute_dock_rates(df, bin_minutes = 5, tz = "America/Chicago")`: Computes the 7-day typical-week arrival and departure rate (bikes/min) for every 5-minute slot.
+- `predict_dock(rates, dock, live_bikes, capacity, walk_min, now = Sys.time(), smooth_min = 30, ...)`: Integrates net arrival rates over the travel window to project expected bikes and empty spaces upon arrival.
+- `return_discount(projected_bikes, capacity)`: Assigns rebalancing discount percentages (20% for <25% occupancy; 10% for 25%–50% occupancy; 0% otherwise).
+- `optimize_docks(user_location, stations, rates, mode = c("pickup", "return"), ...)`: Evaluates candidate docks by walking/cycling road distances, excludes docks with <1 projected unit, and provides distance-ordered recommendations.
+- `parse_city_time(x, tz)`: Safely parses date-time strings with UTC offsets into POSIXct for a given city timezone.
+
+#### B. Usable Fleet Reliability & Failure Factor (`failure_factor.R`)
+- `failure_factor(rates)`: Computes the multiplicative survival factor across independent defect rates: $\prod (1 - r_i)$.
+- `failure_breakdown(rates)`: Generates a Pareto table of individual failure rates, isolated survival rates, and cumulative usable factor, sorted worst-first.
+- `apply_failure_factor(predicted, rates)`: Scales predicted bike counts by the fleet failure factor to determine actual usable/rentable bikes.
+- `check_rates(rates)`: Validates that defect inputs are named proportions strictly within $[0, 1]$.
+
+#### C. Statistical Process Control (SPC) P-Charts (`pchart.R`)
+- `daily_service_counts(data, service_interval_h, tz = "America/New_York", ...)`: Tracks cumulative ride hours from 5-minute logs and aggregates daily subgroup sizes ($n$) and bikes requiring service ($d$).
+- `p_chart(d, n, label = seq_along(d))`: Computes sample proportions ($p_i = d_i / n_i$), center line ($\bar{p}$), 3-sigma control limits ($UCL_i, LCL_i$), and flags out-of-control days.
+- `plot_p_chart(chart, main = ...)`: Plots a publication-ready control chart with sample-size-stepped limits and red out-of-control alarm points using base R graphics.
+- `pc_parse_time(x)`: Internal ISO-8601 parser for P-chart time logs.
+
+#### D. Maintenance Fleet Dispatch & Anomaly Detection (`maintenance_qc.R`)
+- `service_status(data, service_interval_h, service_log = NULL, ...)`: Accumulates ride hours per bike and flags whether a bike is due for preventive maintenance (`due = TRUE`) and the exact timestamp (`due_at`).
+- `maintenance_alerts(data, threshold_min = 90, ...)`: Flags bikes currently away from any dock past a duration threshold (e.g., 90 min) indicating abandonment, theft, or breakdown.
+- `station_service_priority(data, service_interval_h, ...)`: Ranks stations by the number of docked due bikes (`n_due`) and cumulative overdue hours to maximize mobile van service efficiency.
+- `simulate_start_hours(bike_ids, service_interval_h, seed = 42)`: Generates uniform staggered initial ride hours (0 to $x$) so fleet maintenance cycles do not artificially synchronize.
+- `dispatch_recommendation(data, service_interval_h, threshold_min = 90, ...)`: Unified operational call returning stuck alerts, service due bikes, and ranked van station visits in one list.
+
+#### E. Probabilistic Availability & Distance Helpers (`availability.R`, `recommend.R`, `distances.R`, `aggregate.R`)
+- `get_bike_availability(b0, lam_out, lam_in)`: Evaluates bivariate Poisson summation to determine the probability of finding $\ge 1$ bike.
+- `get_slot_availability(b0, capacity, lam_out, lam_in)`: Evaluates bivariate Poisson summation to determine the probability of finding $\ge 1$ open docking slot.
+- `recommend_dock(candidates, threshold = 0.90)`: Applies a threshold decision rule to select the nearest dock with high confidence.
+- `dock_distances(distance_grid, from, to, max_miles)`: Looks up and filters pre-computed road network distances.
+- `aggregate_snapshots(snapshots, stations, default_capacity = 30)`: Converts raw 3-column movement logs into station-level counts.
+
+---
+
+## 3. Installation & Loading
+
+```r
+# Option 1: Load during development (from repo root)
+devtools::load_all("deliverables/bikesmart")
+
+# Option 2: Build and install local package tarball
+# R CMD build deliverables/bikesmart
+# R CMD INSTALL bikesmart_0.1.0.tar.gz
+library(bikesmart)
+```
+
+---
+
+## 4. End-to-End Usage Examples
+
+### Example 1: Predictive Dock Arrival & Return Rebalancing
+```r
+library(bikesmart)
+
+# Load movement history and road distances
+mke_history <- readRDS("data/milwaukee.rds")
+mke_distances <- read.csv("data/optimizer/user_dock_distances.csv")
+
+# 1. Compute historical 5-minute net docking rates
+rates <- compute_dock_rates(mke_history, bin_minutes = 5, tz = "America/Chicago")
+
+# 2. Live stations snapshot
+stations <- data.frame(
+  dockID = c("Discovery World", "411 East Wisconsin ", "Cathedral Square"),
+  live_bikes = c(2, 5, 28),
+  capacity = c(30, 30, 30),
+  stringsAsFactors = FALSE
+)
+
+# 3. Find closest eligible pickup dock (excludes docks projected < 1 bike)
+pickup_rec <- optimize_docks(
+  user_location = "MKE-LOC01",
+  stations = stations,
+  rates = rates,
+  mode = "pickup",
+  now = "2026-10-19 08:00:00",
+  user_distances = mke_distances,
+  tz = "America/Chicago"
+)
+head(pickup_rec)
+
+# 4. Find return dock with rebalancing discount
+return_rec <- optimize_docks(
+  user_location = "MKE-LOC01",
+  stations = stations,
+  rates = rates,
+  mode = "return",
+  now = "2026-10-19 08:30:00",
+  user_distances = mke_distances,
+  tz = "America/Chicago"
+)
+head(return_rec)
+```
+
+### Example 2: Maintenance Dispatch & Anomaly Detection
+```r
+library(bikesmart)
+
+bikes_data <- readRDS("data/jersey_city.rds")
+start_hours <- simulate_start_hours(unique(bikes_data$BIKEID), service_interval_h = 60, seed = 42)
+
+# Run complete maintenance dispatch
+dispatch <- dispatch_recommendation(
+  data = bikes_data,
+  service_interval_h = 60,
+  threshold_min = 90,
+  start_hours = start_hours
+)
+
+# Stuck bike alerts (lost/stolen/broken)
+head(dispatch$stuck_alerts)
+
+# Stations prioritized for maintenance van stop
+head(dispatch$stations)
+```
+
+### Example 3: Attribute Statistical Process Control (P-Chart)
+```r
+library(bikesmart)
+
+# Daily counts of bikes reaching service threshold
+counts <- daily_service_counts(
+  data = bikes_data,
+  service_interval_h = 60,
+  start_hours = start_hours
+)
+
+# Compute P-chart center line & 3-sigma limits
+chart <- p_chart(d = counts$d, n = counts$n, label = counts$day)
+
+# Plot control chart
+plot_p_chart(chart, main = "P-Chart: Daily Share of Bikes Due for Maintenance")
+```
+
+### Example 4: Fleet Usable Factor & Reliability
+```r
+library(bikesmart)
+
+# Define known or surveyed defect rates
+defect_rates <- c(flat_tire = 0.02, dead_battery = 0.05, chain_brakes = 0.015)
+
+# Calculate rolled usable share
+usable_factor <- failure_factor(defect_rates)
+cat(sprintf("Expected usable fleet percentage: %.2f%%\n", usable_factor * 100))
+
+# Defect contribution breakdown
+failure_breakdown(defect_rates)
+
+# Scale projected inventory to usable rentable bikes
+projected_bikes <- c(10, 15, 20)
+usable_bikes <- apply_failure_factor(projected_bikes, defect_rates)
+print(usable_bikes)
+```
+
+---
+
+## 5. Verification & Tests
+
+To execute all unit tests across all 5 test suites:
+```bash
+Rscript deliverables/bikesmart/tests/test_all.R
+```
+All tests verify known-answer hand calculations, boundary conditions, and degenerate cases.

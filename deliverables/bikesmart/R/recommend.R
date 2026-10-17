@@ -71,6 +71,12 @@
 #'
 #' # Lower threshold: DockA (10 min, p=0.61) beats DockB (20 min, p=0.95)
 #' recommend_dock(candidates, threshold = 0.60)
+# ------------------------------------------------------------------------------
+# recommend_dock
+# ------------------------------------------------------------------------------
+# Short description: Selects the best dock from candidate options using a threshold
+# rule (closest dock meeting threshold, or highest probability fallback).
+
 recommend_dock <- function(candidates, threshold = 0.90) {
   # --- input checks --------------------------------------------------------
   stopifnot(
@@ -82,22 +88,22 @@ recommend_dock <- function(candidates, threshold = 0.90) {
   )
 
   # Drop rows with missing probability (dock data unavailable)
-  valid <- filter(candidates, !is.na(p))
+  valid <- dplyr::filter(candidates, !is.na(p))
 
   if (nrow(valid) == 0L)
     stop("All candidates have missing probability (p = NA). ",
          "Run get_bike_availability() / get_slot_availability() first.")
 
   # --- apply decision rule -------------------------------------------------
-  above_threshold <- filter(valid, p >= threshold)
+  above_threshold <- dplyr::filter(valid, p >= threshold)
 
   if (nrow(above_threshold) >= 1L) {
     # Sort by minutes ascending, then p descending for ties
-    ranked  <- arrange(above_threshold, minutes, desc(p))
+    ranked  <- dplyr::arrange(above_threshold, minutes, desc(p))
     reason  <- "threshold met"
   } else {
     # Fall back: highest p, ties broken by fewest minutes
-    ranked  <- arrange(valid, desc(p), minutes)
+    ranked  <- dplyr::arrange(valid, desc(p), minutes)
     reason  <- "no dock met threshold - best available returned"
     warning("No candidate dock reached p >= ", threshold,
             ". Returning best available (p = ", round(ranked$p[1], 4), ").")
