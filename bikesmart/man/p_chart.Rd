@@ -7,24 +7,19 @@
 p_chart(d, n, label = seq_along(d))
 }
 \arguments{
-\item{d}{Integer vector of defect counts in each subgroup (e.g. bikes due).}
+\item{d}{Integer vector of defect counts in each subgroup (e.g. bikes due on day i).}
 
-\item{n}{Integer vector of subgroup sample sizes (e.g. active bikes).}
+\item{n}{Integer vector of subgroup sample sizes (e.g. active bikes on day i).}
 
-\item{label}{Optional character or Date vector naming each subgroup.}
+\item{label}{Optional character/Date vector naming each subgroup (default: indices).}
 }
 \value{
-Data frame with columns \code{label}, \code{n}, \code{d}, \code{p}, \code{p_bar},
-\code{lcl}, \code{ucl}, and \code{out_of_control}.
+Data frame with columns \code{label}, \code{n}, \code{d}, \code{p}, \code{p_bar}, \code{lcl}, \code{ucl}, and \code{out_of_control}.
 }
 \description{
 Calculates binomial attribute control chart statistics (proportions, center line,
-sample-size-dependent upper/lower 3-sigma control limits, and out-of-control flags).
+upper/lower control limits, and out-of-control flags) following standard SQC formulas.
 }
 \examples{
-p_chart(d = c(5, 10, 15), n = c(100, 100, 100))
+p_chart(d = c(5, 10, 15), n = c(100, 100, 100), label = c("Day 1", "Day 2", "Day 3"))
 }
-\author{
-Big Red Crew
-}
-

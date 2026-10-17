@@ -19,7 +19,3 @@ rates, isolated survival rates, and cumulative survival factor ordered worst-fir
 \examples{
 failure_breakdown(c(flat_tire = 0.02, battery = 0.05, crash = 0.01))
 }
-\author{
-Big Red Crew
-}
-

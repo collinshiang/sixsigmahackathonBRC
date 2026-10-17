@@ -17,8 +17,11 @@
 ^\.Renviron$
 ^\.Rhistory$
 
-# The build/dev workflow script itself (useful locally, not part of the package)
+# The build/dev/deploy workflow scripts (useful locally, not part of the package)
 ^buildme\.R$
+^manifestme\.R$
+^deployme\.R$
+^testme\.R$
 
 # Any scratch or dev scripts you create while building
 ^dev\.R$

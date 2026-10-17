@@ -18,17 +18,17 @@ optimize_docks(
 )
 }
 \arguments{
-\item{user_location}{Character ID matching \code{location_id} in distance inputs.}
+\item{user_location}{Character ID matching \code{location_id} in \code{user_distances}.}
 
 \item{stations}{Data frame with \code{dockID}, \code{live_bikes}, and \code{capacity}.}
 
-\item{rates}{Data frame of historical rates from \code{compute_dock_rates()}.}
+\item{rates}{Data frame of historical rates from \code{\link[=compute_dock_rates]{compute_dock_rates()}}.}
 
 \item{mode}{Mode of travel: \code{"pickup"} (walking) or \code{"return"} (biking).}
 
 \item{now}{POSIXct or character departure time (default: \code{Sys.time()}).}
 
-\item{user_distances}{Data frame of road distances with columns \code{location_id}, \code{mode}, \code{dockID}, \code{distance}.}
+\item{user_distances}{Data frame of road distances with \code{location_id}, \code{mode}, \code{dockID}, \code{distance}.}
 
 \item{travel_speed_mph}{Numeric travel speed (default: 3 mph for pickup, 10 mph for return).}
 
@@ -36,17 +36,14 @@ optimize_docks(
 
 \item{bin_minutes}{Bin size in minutes (default: 5).}
 
-\item{tz}{City timezone string.}
+\item{tz}{City timezone string (default: from rates attribute).}
 }
 \value{
 Data frame of eligible stations ordered by distance, with arrival projections and discounts.
 }
 \description{
-Evaluates candidate docks relative to a user location. Projects inventory at arrival time,
-excludes docks with fewer than 1 projected bike (pickup) or space (return), and returns
-valid docks ordered by road network distance.
+Evaluates candidate docks relative to a user location. Projects bike/space
+availability at arrival time, excludes docks with fewer than 1 projected bike
+(pickup mode) or fewer than 1 projected space (return mode), and returns valid
+docks ordered by road distance.
 }
-\author{
-Big Red Crew
-}
-

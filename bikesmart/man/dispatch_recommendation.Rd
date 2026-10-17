@@ -29,16 +29,12 @@ dispatch_recommendation(
 \value{
 A named list containing:
 \describe{
-  \item{\code{stuck_alerts}}{Data frame of bikes currently away exceeding threshold.}
-  \item{\code{service_due}}{Data frame of bikes currently meeting or exceeding service interval.}
-  \item{\code{stations}}{Data frame of stations ranked by number of docked due bikes for van visits.}
+\item{\code{stuck_alerts}}{Data frame of bikes currently away exceeding \code{threshold_min}.}
+\item{\code{service_due}}{Data frame of bikes currently meeting or exceeding \code{service_interval_h}.}
+\item{\code{stations}}{Data frame of stations ranked by number of docked due bikes for van visits.}
 }
 }
 \description{
 Primary entry point for maintenance fleet operations. Combines anomaly detection
 for stuck bikes, individual bike service statuses, and ranked station routing priorities.
 }
-\author{
-Big Red Crew
-}
-

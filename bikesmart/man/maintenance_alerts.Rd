@@ -20,7 +20,3 @@ Data frame with \code{BIKEID}, \code{duration_min}, and \code{flagged} logical, 
 Evaluates the latest recorded snapshot and flags any bike currently away from
 docks (\code{DOCID == "0"}) whose continuous transit duration meets or exceeds \code{threshold_min}.
 }
-\author{
-Big Red Crew
-}
-

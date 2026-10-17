@@ -18,22 +18,25 @@ the rider's travel window to this dock.}
 the rider's travel window to this dock.}
 }
 \value{
-A single numeric in [0, 1]: the probability that at least one
-  open slot is present when the rider arrives.
+A single numeric in \link{0, 1}: the probability that at least one
+open slot is present when the rider arrives.
 }
 \description{
 Given the current number of bikes at a dock (\code{b0}), the dock's total
 capacity, and the expected Poisson flow rates, returns the probability
 that at least one open slot will be available when a rider arrives to
 return their bike.
+
+\strong{Method:} Open slots = \code{capacity - b0}. We need \code{P(open_slots + Out - In >= 1)}, where more departures and fewer arrivals both help.
+Evaluated with the same numerical grid as \code{\link[=get_bike_availability]{get_bike_availability()}},
+with the roles of \code{lam_out} and \code{lam_in} swapped.
 }
 \examples{
 # Dock has 5 bikes, capacity 10, so 5 open slots; moderate flow
 get_slot_availability(b0 = 5, capacity = 10, lam_out = 1, lam_in = 1)
-# Full dock, nothing leaving -> no slot available
+# Full dock (b0 == capacity), nothing leaving → no slot available
 get_slot_availability(b0 = 10, capacity = 10, lam_out = 0, lam_in = 0)
 }
 \author{
 Big Red Crew
 }
-

@@ -30,7 +30,3 @@ Data frame with columns \code{BIKEID}, \code{ride_hours}, \code{due}, \code{due_
 Tracks usage accumulation across 5-minute snapshot logs for every bike. When
 cumulative ride hours exceed \code{service_interval_h}, flags \code{due = TRUE} and records \code{due_at}.
 }
-\author{
-Big Red Crew
-}
-

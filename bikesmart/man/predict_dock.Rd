@@ -17,7 +17,7 @@ predict_dock(
 )
 }
 \arguments{
-\item{rates}{Data frame of historical rates produced by \code{compute_dock_rates()}.}
+\item{rates}{Data frame of historical rates produced by \code{\link[=compute_dock_rates]{compute_dock_rates()}}.}
 
 \item{dock}{Station identifier string (\code{DOCID}).}
 
@@ -42,7 +42,3 @@ Named numeric vector with \code{expected_bikes}, \code{expected_spaces}, and \co
 Uses smoothed typical-week docking profiles to estimate net inventory changes
 over the user's travel time, projecting available bikes and free spaces upon arrival.
 }
-\author{
-Big Red Crew
-}
-

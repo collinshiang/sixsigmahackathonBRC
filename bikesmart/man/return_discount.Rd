@@ -16,9 +16,9 @@ Integer vector of discount percentages (0, 10, or 20).
 }
 \description{
 Computes discount percentage for returning a bike to under-utilized stations:
-occupancy < 25\% yields 20\%; 25\% to <50\% yields 10\%; >=50\% yields 0\%.
+\itemize{
+\item Occupancy < 25\%: 20\% discount
+\item Occupancy 25\% - <50\%: 10\% discount
+\item Occupancy >= 50\%: 0\% discount
 }
-\author{
-Big Red Crew
 }
-

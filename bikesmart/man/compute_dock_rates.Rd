@@ -9,20 +9,16 @@ compute_dock_rates(df, bin_minutes = 5, tz = "America/Chicago")
 \arguments{
 \item{df}{Data frame with columns \code{BIKEID}, \code{DOCID}, and \code{time}.}
 
-\item{bin_minutes}{Integer slot width in minutes (default: 5).}
+\item{bin_minutes}{Integer slot width in minutes (default: 5; must divide 1440 evenly).}
 
 \item{tz}{Local city timezone string (default: "America/Chicago").}
 }
 \value{
-A data frame containing columns \code{DOCID}, \code{weekday}, \code{day}, \code{tod},
-\code{slot}, \code{n_days}, \code{avg_docked}, \code{prev_docked}, and \code{rate}.
+A data frame containing columns \code{DOCID}, \code{weekday}, \code{day}, \code{tod}, \code{slot},
+\code{n_days}, \code{avg_docked}, \code{prev_docked}, and \code{rate} (bikes/min).
 }
 \description{
 Aggregates 5-minute snapshot logs across a multi-week historical observation
-window to determine typical arrival and departure rates at each dock for every
-5-minute slot of a 7-day week (2,016 weekly slots).
+window to determine the typical arrival and departure rates at each dock for
+every 5-minute slot of a 7-day week (2,016 weekly slots).
 }
-\author{
-Big Red Crew
-}
-

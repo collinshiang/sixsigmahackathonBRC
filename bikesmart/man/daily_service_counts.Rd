@@ -28,9 +28,6 @@ Data frame with columns \code{day}, \code{n} (observed bikes), and \code{d} (bik
 }
 \description{
 Evaluates continuous usage from 5-minute snapshot logs, tracking cumulative ride hours
-and identifying bikes crossing service thresholds on each day.
+(snapshots where \code{DOCID == "0"}). Whenever a bike crosses an integer multiple of
+\code{service_interval_h}, it is flagged as due for service on that day.
 }
-\author{
-Big Red Crew
-}
-

@@ -12,16 +12,12 @@ apply_failure_factor(predicted, rates)
 \item{rates}{Named numeric vector of defect shares.}
 }
 \value{
-Numeric vector scaled by the calculated usable failure factor.
+Numeric vector of the same length as \code{predicted}, scaled by the factor.
 }
 \description{
-Multiplies predicted bike counts by the fleet usable factor to give the
-expected count of functional, rentable bikes.
+Multiplies a predicted bike count or vector of station bike counts by the
+fleet usable factor to give the expected count of functional, rentable bikes.
 }
 \examples{
 apply_failure_factor(c(10, 20, 30), c(flat_tire = 0.02, battery = 0.05))
 }
-\author{
-Big Red Crew
-}
-

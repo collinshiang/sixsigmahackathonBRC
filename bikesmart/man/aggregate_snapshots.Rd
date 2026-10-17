@@ -13,7 +13,7 @@ aggregate_snapshots(snapshots, stations, default_capacity = 30L)
 
 \item{stations}{A data frame with at least a \code{dockID} column (character)
 and optionally \code{capacity} (integer, docking slots available), \code{name},
-\code{lat}, \code{lon}. Loaded from \code{data/stations/<city>.csv}. If \code{capacity} is
+\code{lat}, \code{lon}. Loaded from \verb{data/stations/<city>.csv}. If \code{capacity} is
 not present, a default value is assumed (see \code{default_capacity}).}
 
 \item{default_capacity}{Integer. Capacity to assume for any dock not
@@ -23,10 +23,10 @@ which matches the simulation setup in \code{simulate_data.R}.}
 \value{
 A data frame with columns:
 \describe{
-  \item{\code{DOCID}}{Character. Dock identifier (matches \code{stations$dockID}).}
-  \item{\code{time}}{POSIXct. Snapshot timestamp.}
-  \item{\code{bikes}}{Integer. Number of bikes at this dock at this timestamp.}
-  \item{\code{capacity}}{Integer. Total docking slots at this dock.}
+\item{\code{DOCID}}{Character. Dock identifier (matches \code{stations$dockID}).}
+\item{\code{time}}{POSIXct. Snapshot timestamp.}
+\item{\code{bikes}}{Integer. Number of bikes at this dock at this timestamp.}
+\item{\code{capacity}}{Integer. Total docking slots at this dock.}
 }
 }
 \description{
@@ -34,8 +34,7 @@ Takes the raw three-column movement data (one row per bike per timestamp)
 and collapses it to one row per dock per timestamp, counting the number
 of bikes currently at each dock. Rows where \code{DOCID == "0"} (bikes in
 transit) are excluded from dock counts. The resulting data frame is the
-input expected by \code{\link{get_bike_availability}} and
-\code{\link{get_slot_availability}}.
+input expected by \code{\link[=get_bike_availability]{get_bike_availability()}} and \code{\link[=get_slot_availability]{get_slot_availability()}}.
 }
 \examples{
 \dontrun{
@@ -49,4 +48,3 @@ head(dock_data)
 \author{
 Big Red Crew
 }
-

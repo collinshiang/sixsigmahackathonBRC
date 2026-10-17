@@ -20,7 +20,3 @@ Data frame with columns \code{BIKEID} and \code{start_hours}.
 Assigns a uniform random baseline of prior ride hours between 0 and \code{service_interval_h}
 to each bike in the fleet, simulating realistic asynchronous maintenance schedules.
 }
-\author{
-Big Red Crew
-}
-

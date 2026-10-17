@@ -14,12 +14,10 @@ Single numeric value between 0 and 1 representing usable proportion.
 }
 \description{
 Computes the overall usable proportion of bikes under the assumption of independent
-defect probabilities: product of (1 - rate) across defect types.
+defect probabilities:
+\deqn{\text{factor} = \prod_{i=1}^k (1 - r_i)}
+where \eqn{r_i} is the defect rate for fault category \eqn{i}.
 }
 \examples{
-failure_factor(c(flat_tire = 0.02, battery = 0.05))
+failure_factor(c(flat_tire = 0.02, battery = 0.05)) # Returns 0.931
 }
-\author{
-Big Red Crew
-}
-

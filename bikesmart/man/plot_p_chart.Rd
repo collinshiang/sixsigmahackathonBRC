@@ -4,10 +4,13 @@
 \alias{plot_p_chart}
 \title{Plot a Statistical Quality Control P-Chart}
 \usage{
-plot_p_chart(chart, main = "P chart: share of bikes needing maintenance per day")
+plot_p_chart(
+  chart,
+  main = "P chart: share of bikes needing maintenance per day"
+)
 }
 \arguments{
-\item{chart}{Data frame output produced by \code{p_chart()}.}
+\item{chart}{Data frame output produced by \code{\link[=p_chart]{p_chart()}}.}
 
 \item{main}{Title for the chart.}
 }
@@ -15,10 +18,6 @@ plot_p_chart(chart, main = "P chart: share of bikes needing maintenance per day"
 Invisibly returns the input \code{chart} data frame.
 }
 \description{
-Draws a P-chart display showing subgroup proportions, center line (p-bar),
-stepped 3-sigma control limits, and highlighted out-of-control points.
+Draws a P-chart display showing subgroup proportions, center line, stepped limits
+(to accommodate sample size differences), and highlighted out-of-control points.
 }
-\author{
-Big Red Crew
-}
-

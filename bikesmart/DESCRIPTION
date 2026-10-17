@@ -17,7 +17,6 @@ Description: Comprehensive quality control, reliability analysis, and predictive
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Depends:
     R (>= 4.0.0)
 Imports:
@@ -25,3 +24,4 @@ Imports:
 Suggests:
     ggplot2,
     testthat (>= 3.0.0)
+Config/roxygen2/version: 8.1.1

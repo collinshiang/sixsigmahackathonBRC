@@ -16,8 +16,8 @@ get_bike_availability(b0, lam_out, lam_in)
 (drop-offs) to this dock over the rider's travel window.}
 }
 \value{
-A single numeric in [0, 1]: the probability that at least one
-  bike is present when the rider arrives.
+A single numeric in \link{0, 1}: the probability that at least one
+bike is present when the rider arrives.
 }
 \description{
 Given the current number of bikes at a dock (\code{b0}) and the expected
@@ -26,9 +26,11 @@ the rider's walking time to the dock, returns the probability that at
 least one bike will be there when the rider arrives.
 
 \strong{Method:} With departures \code{Out ~ Poisson(lam_out)} and arrivals
-\code{In ~ Poisson(lam_in)} modeled as independent, we compute
-\code{P(b0 + In - Out >= 1)} by summing the joint Poisson PMF over a
-truncated grid.
+\code{In ~ Poisson(lam_in)} modeled as independent, the net change is
+\code{Delta = In - Out}. We want \code{P(b0 + Delta >= 1)}, i.e.
+\code{P(Out - In <= b0 - 1)}. This is evaluated numerically by summing
+the joint Poisson probability mass over a grid up to the 99.99th
+quantile of each marginal distribution.
 }
 \examples{
 # With 1 bike, equal departure and arrival rates of 1: ~60.6\% chance
@@ -41,4 +43,3 @@ get_bike_availability(b0 = 0, lam_out = 0, lam_in = 0)
 \author{
 Big Red Crew
 }
-

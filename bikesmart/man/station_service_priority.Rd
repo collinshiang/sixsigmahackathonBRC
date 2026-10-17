@@ -24,13 +24,10 @@ station_service_priority(
 \item{start_hours}{Optional data frame (\code{BIKEID}, \code{start_hours}) of initial usage offsets.}
 }
 \value{
-Data frame with columns \code{DOCID}, \code{n_bikes}, \code{n_due}, \code{overdue_hours}, and \code{total_ride_hours}.
+Data frame with columns \code{DOCID}, \code{n_bikes}, \code{n_due}, \code{overdue_hours}, \code{total_ride_hours}.
 }
 \description{
 Prioritizes station visits for the maintenance crew by sorting stations with the
 largest count of due bikes currently docked, breaking ties by cumulative overdue hours.
+Bikes in transit are excluded as they cannot be accessed by the van.
 }
-\author{
-Big Red Crew
-}
-
