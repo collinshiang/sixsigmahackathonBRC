@@ -54,7 +54,7 @@ tasks:
       pass; ls data/*.csv.gz lists
       exactly 3 movement datasets, and data/README.md describes every
       column, mile distances, source metadata, and synthetic assumptions.
-    result: "Reviewed: Jersey City, Milwaukee, Tampa zoned datasets; 27 real locations and 3499200 rows each; usage 33.382%, 33.322%, 33.395%; Rscript data/validate_simulation.R and python3 data/validate_tampa_locations.py pass; 8640 observations per bike, no duplicate bike-timestamp pairs; three compressed CSVs and complete codebook."
+    result: "Reviewed: Jersey City, Milwaukee, Tampa zoned datasets; 27 real locations and 3499200 rows each; usage 33.382%, 33.322%, 33.395%; movement/zoning and Tampa intersection validation pass; 8640 observations per bike, no duplicate bike-timestamp pairs; three compressed CSVs, codebook, and city input requirements guide."
 
   - id: H-03
     title: Core QC statistic as one plain, tested function
@@ -156,3 +156,17 @@ tasks:
       testme script and the H-03 tests both pass with no extra steps; git
       grep -i "api_key" finds no real key; the Devpost entry links the repo.
     result: ""
+
+  - id: H-09
+    title: Rank available pickup and return docks with occupancy incentives
+    points: "Supports rider recommendations and network balancing"
+    status: in_progress
+    owner: "Codex + Lexi"
+    started_at: "2026-10-16"
+    owns: ["dock_projection.R", "tests/test_dock_optimizer.R", "data/optimizer/"]
+    definition_of_done: >
+      Rscript tests/test_dock_optimizer.R passes known-answer, availability,
+      distance ordering, incentive boundary, and empty-result cases;
+      data/optimizer/user_locations.csv contains 10 sourced real locations
+      per city (30 total), with 1620 walking/cycling road distances.
+    result: "READY FOR REVIEW: optimizer, 30 real user inputs, 1620 road distances, CSV demos and interactive local viewer added; optimizer checks and all 60 data cases pass; defaults 3 mph pickup and 10 mph return; viewer browser checks recorded under data/optimizer/."
