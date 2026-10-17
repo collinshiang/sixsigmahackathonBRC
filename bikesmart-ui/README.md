@@ -121,13 +121,13 @@ with `--rider-only`; it no longer republishes the older root-script CSV outputs.
 
 ## Maintenance workspace
 
-The header's **maintenance login here** button opens a separate sign-in screen.
-Use the maintenance credentials supplied for this demo. Validation happens in
-`server/api.mjs`, not in browser JavaScript. A successful login creates an
-HttpOnly, SameSite=Strict session cookie; logout invalidates the server session.
-Reports are served only through authenticated API routes. The raw maintenance
-JSON and server source are denied by the Vite file server and excluded from the
-frontend build.
+The header's **maintenance login** button opens a separate sign-in screen.
+Demo credentials are provided for evaluators and guests to test all features:
+- **Email / Username:** `maintenance@cornell.edu`
+- **Password:** `123`
+
+The sign-in screen includes an **Auto-fill demo credentials** button for immediate 1-click access.
+On the deployed Posit Connect app, client-side offline storage and bundled fleet datasets power the entire workspace (fleet replay, service logs, dispatch priorities, in-transit alerts, quality charts, and reliability calculator). When run locally with `npm start`, `server/api.mjs` handles sessions with HttpOnly cookies and calls the R package dynamically.
 
 The workspace supports all three cities:
 

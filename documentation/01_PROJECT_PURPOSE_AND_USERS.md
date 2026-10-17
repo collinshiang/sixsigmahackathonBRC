@@ -60,6 +60,8 @@ BikeSmart is engineered with distinct user personas in mind, providing targeted 
   - **Ranked Station Service Priority:** Sorts stations by the number of docked bikes currently due for maintenance ($n_{due}$) and cumulative overdue hours.
   - **Recorded In-Transit Alerts:** Detects bikes that have been away from any dock for $>90$ minutes, marking long trips for review without proving theft, damage or abandonment.
 
+> **Demo Access for Evaluators:** The maintenance portal for Personas 2 & 3 is accessible in the UI using demo credentials: **Email:** `maintenance@cornell.edu` | **Password:** `123`.
+
 ### Persona 3: System Operations & Quality Control Manager
 - **Profile:** Fleet director monitoring fleet health, maintenance contracts, and safety standards.
 - **Pain Points:**

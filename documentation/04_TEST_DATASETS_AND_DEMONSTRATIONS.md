@@ -88,3 +88,12 @@ The test datasets are specifically engineered to demonstrate the four statistica
 - **Observation:** Earlier synthetic trip durations had a median of 15 minutes and a 99th percentile of 80–85 minutes.
 - **Tool Demonstration:** `maintenance_alerts(threshold_min = 90)` isolates bikes still undocked past 90 minutes, for operator investigation; long trips also occur naturally in the simulator.
 
+### 5. Interactive Maintenance Portal Demonstration
+To inspect these demonstrations interactively in the web application:
+1. Click **Maintenance Login** in the site header.
+2. Sign in with the demo credentials:
+   - **Username / Email:** `maintenance@cornell.edu`
+   - **Password:** `123`
+   *(or click the "Auto-fill demo credentials" button on the sign-in screen)*
+3. Explore the 7 maintenance modules: Fleet monitor playback, Service log, Dispatch priorities, Service due, In-transit alerts, Quality P-chart, and Fleet reliability calculator.
+

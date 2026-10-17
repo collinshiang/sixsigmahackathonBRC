@@ -36,3 +36,10 @@ Rscript bikesmart/tests/test_all.R
 
 All 5 test suites (known-answer hand calculations, edge cases, and degenerate inputs) pass with zero errors.
 
+### 🔑 Demo Maintenance Sign-In Credentials
+To inspect the maintenance workspace (fleet replay monitor, service log, dispatch priorities, in-transit alerts, quality P-charts, and reliability calculator):
+- **Email / Username:** `maintenance@cornell.edu`
+- **Password:** `123`
+
+These demo credentials can be used directly on the live deployed web application or locally.
+

@@ -55,7 +55,9 @@ Your team tackles one real-world quality control and reliability problem.
   delivery vehicle for the analysis, not the point
 - 🧱 Ship a a dashboard / web app (React or Shiny), plus **one** of: an R package or Python library AND/OR a public REST API
   (FastAPI or plumber).
-- 🚀 Deploy it live to the course **Posit Connect** server
+- 🚀 Deploy it live to the course **Posit Connect** server:
+  - **Live URL:** [https://connect.systems-apps.com/content/a806618c-0404-464a-923e-d20ed0427031/](https://connect.systems-apps.com/content/a806618c-0404-464a-923e-d20ed0427031/)
+  - **Demo Maintenance Sign-In:** `maintenance@cornell.edu` / `123` (with 1-click auto-fill on the sign-in card)
 - 🔢 Every project is scored 0-100 by the event staff.
   [Read the criteria](docs/criteria.md)
 
