@@ -1,4 +1,5 @@
-source("dock_projection.R")
+library(dplyr)
+source(if (file.exists("bikesmart/R/dock_projection.R")) "bikesmart/R/dock_projection.R" else "dock_projection.R")
 
 rates_for <- function(values) {
   result <- do.call(rbind, lapply(names(values), function(dock)

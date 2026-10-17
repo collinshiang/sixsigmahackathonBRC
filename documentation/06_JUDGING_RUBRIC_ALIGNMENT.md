@@ -16,8 +16,8 @@
 | **5. Clear, Minimal Requirements** | **5** | Riders enter only location & intent (pickup vs return); van crew runs one single command; relies only on standard 3-column logs (`BIKEID`, `DOCID`, `time`). | `01_PROJECT_PURPOSE_AND_USERS.md`, `03_CITY_ONBOARDING_AND_INPUT_REQUIREMENTS.md` |
 | **6. Demonstration** | **10** | End-to-end demonstrations illustrating commuter flow predictions, van prioritization, P-chart in-control vs out-of-control states, and stuck-bike alerts. | `04_TEST_DATASETS_AND_DEMONSTRATIONS.md`, `bikesmart/README.md` |
 | **7. Documentation** | **10** | Comprehensive multi-page documentation portal detailing every function, parameter, type, default, return value, mathematical formula, and step-by-step onboarding guide. | `documentation/` portal (6 core guides), `.Rd` manuals in `man/` |
-| **8. Test Datasets** | **5** | 3 complete, accurate urban test datasets (Jersey City, Milwaukee, Tampa) with 8,640 snapshots, road networks, zoning, and station coordinates. | `data/` and `test_datasets/` (`jersey_city`, `milwaukee`, `tampa`) |
-| **9. Dataset Explainers** | **5** | Complete variable codebook, coordinate reference systems, timezone metadata, and OSM provenance documented in detail. | `04_TEST_DATASETS_AND_DEMONSTRATIONS.md`, `test_datasets/README.md`, `data/README.md` |
+| **8. Test Datasets** | **5** | 3 complete, accurate urban test datasets (Jersey City, Milwaukee, Tampa) with 8,640 snapshots, road networks, zoning, and station coordinates. | `data/` (`jersey_city`, `milwaukee`, `tampa`) |
+| **9. Dataset Explainers** | **5** | Complete variable codebook, coordinate reference systems, timezone metadata, and OSM provenance documented in detail. | `04_TEST_DATASETS_AND_DEMONSTRATIONS.md`, `data/README.md`, `data/CODEBOOK.md` |
 | **10. Reproducibility** | **5** | 100% reproducible code with fixed seeds, clean directory structure, hosted on GitHub, with automated test scripts. | Public GitHub repository, `test_all.R`, `simulate_data.R` |
 | **TOTAL** | **100** | **Complete score alignment** | |
 

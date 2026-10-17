@@ -1,74 +1,92 @@
-# SPEC: Six Sigma Hackathon team project 
+# SPEC: Six Sigma Hackathon Team Project (Big Red Crew)
 
-What your tool IS. Your agent reads this before every task. Where the code and this file
-disagree, the code is the bug: change this file first, then the code.
+What our tool IS. This document defines the scope, personas, inputs, statistics, and deliverables for the Cornell Six Sigma Hackathon.
 
-Most of this page is already decided by the event and the [rubric](docs/criteria.md).
-**Only the `FILL IN` lines change, and you do not have to write them by hand:** describe your app and ask your agent to update them. They depend on the prompt your team picks at kickoff
-(prompts are secret until then, see [`docs/prompts.md`](docs/prompts.md)) and on your team.
-The examples after each `FILL IN` show the shape of an answer. They are not hints about the prompts.
+---
 
-## 1. Team and prompt
+## 1. Team and Prompt
 - **Team name:** Big Red Crew
-- **Track:** On campus (24 hours). See [`docs/schedule.md`](docs/schedule.md).
-- **Prompt we chose:** Urban Systems, the prompt number and title, copied from the [Devpost](https://six-sigma-hackathon.devpost.com/) challenge page at kickoff.
-- **Our public repo:** "https://github.com/collinshiang/sixsigmahackathonBRC"
+- **Track:** On campus (24 hours sprint).
+- **Prompt we chose:** Urban Systems — Micro-Mobility Fleet Rebalancing & Quality Control
+- **Our public repo:** https://github.com/collinshiang/sixsigmahackathonBRC
 
-## 2. User and use case (rubric: scope 5, user and use case 5)
-- **User:** The bike rider (commuter, tourist).
-- **Decision the tool helps them make, and when:** Where to pick up a bike from and where to drop their bike off (optimal location).
-- **Why this matches the prompt:** FILL IN, one sentence.
+---
 
-## 3. Inputs (rubric: minimal inputs 5)
-Only what this user can actually measure or already knows. Fewer is better; every input a user
-cannot measure costs points.
+## 2. User and Use Case (Rubric: Scope 5, User and Use Case 5)
+- **Primary User:** The bike-share rider/commuter seeking reliable pickup and return locations.
+- **Secondary Users:** Fleet maintenance technicians, mobile van drivers, and system quality control managers.
+- **Decision the tool helps them make, and when:** 
+  - *For Riders:* Which station to pick up from and return to, choosing stations projected to have available bikes/slots upon arrival, with dynamic discount incentives for returning to low-inventory stations.
+  - *For Maintenance Crew:* Which stations to visit first with the mobile repair van (ranked by number of docked due bikes and overdue hours), and immediate alerts for bikes stuck in transit past 90 minutes.
+- **Why this matches the prompt:** Directly tackles micro-mobility urban transit reliability by eliminating dock stockout/overflow failures and optimizing fleet maintenance logistics through statistical process control and predictive inventory balancing.
 
-| Input | Type and units | Where the user gets it |
-|---|---|---|
-| FILL IN. Example: `measurements.csv`, one row per part | numeric, mm | their gauge log |
+---
 
-## 4. The statistics, and why (rubric: valid QC analysis 25)
-Say the method in words before any code exists. Load the `stats-first-steering` skill first.
-- **Method:** FILL IN. Example: "X-bar and R chart, subgroups of 5, limits from the average range"
-- **Why it fits the use case:** FILL IN, one sentence.
-- **Assumptions and how the tool checks them:** FILL IN. Example: "normality: histogram plus Shapiro-Wilk in the demo"
-- **Known-answer check:** FILL IN, a textbook example or hand calculation the function must reproduce.
+## 3. Inputs (Rubric: Minimal Inputs 5)
+Only what users can easily measure or already provide:
 
-Fixed for every team:
-- The statistic lives in **one plain, tested function** (`app/qc.py` or `app/qc.R`). The API, app or
-  package only calls it and displays the result. No statistics inside UI code.
-- Every statistic has a test against a known answer and a degenerate case (constant data, n = 1, missing values).
-- You can explain every number the tool prints. If you cannot, it is not done.
+| User Role | Input | Type and Units | Source |
+|---|---|---|---|
+| **Rider** | Starting location / current coordinates | Character ID or Lat/Lon | User selection or device GPS |
+| **Rider** | Trip intent (pickup vs return) | Character (`pickup` or `return`) | User toggle |
+| **Fleet Manager** | Bike position snapshot log | CSV / RDS (`BIKEID`, `DOCID`, `time`) | Operator GBFS standard feed |
+| **Operator** | Station registry & capacities | CSV (`dockID`, `lat`, `lon`, `capacity`) | Operator infrastructure register |
+| **Operator** | Road network distances | CSV (`dockID1`, `dockID2`, `distance` miles) | OpenStreetMap routing network |
+| **Operator** | Maintenance service interval | Numeric (hours, e.g. 60–70 h) | Manufacturer service specification |
 
-## 5. Delivery (rubric: working tool 25)
-- **Stack:** FILL IN, one of: R package, Python library, REST API (FastAPI or plumber), dashboard (React or Shiny).
-- **Starting demo:** FILL IN, the one folder copied from [`demos/`](demos/README.md) into `app/`. Example: `demos/fastapi/`
+---
 
-Fixed for every team:
-- Start from **one** demo in `demos/`, copied to `app/`. Keep its four-script contract
-  (`testme`, `manifestme`, `deployme`, `README.md`); `testme` starts the tool with one command.
-- Deployed on the course **Posit Connect** server with a public URL (publisher key handed out at the
-  event). Deploy early: copy one workflow from
-  [`.claude/skills/connect-publish/workflows/`](.claude/skills/connect-publish/workflows/).
-- A small tool that runs beats a large tool that does not.
+## 4. The Statistics, and Why (Rubric: Valid QC Analysis 25)
+- **Methods:**
+  1. **Attribute Statistical Process Control (SPC) P-Chart:** Monitored daily defect proportion $p_i = d_i / n_i$ with weighted center line $\bar{p}$ and dynamic 3-sigma control limits ($UCL_i, LCL_i$) adjusted for variable daily active bikes ($n_i$), per Montgomery *Introduction to Statistical Quality Control*.
+  2. **Multiplicative Fleet Usable Factor (Reliability):** Rolled Throughput Yield analogy calculating usable fleet proportion across independent defect modes: $\prod_{j=1}^k (1 - r_j)$.
+  3. **Discrete Rate Integration & Arrival Projection:** Failure-function framework (*SIGMA* Ch. 8) integrating typical-week net docking rates over the rider's travel time to project arrival-time inventory.
+- **Why it fits the use case:** Separates normal common-cause daily maintenance variation from special-cause defect spikes, scales inventory to true usable bikes, and prevents riders from walking to docks that will empty before they arrive.
+- **Assumptions and checks:**
+  - *Binomial subgroup distribution:* Evaluated daily across active bikes ($n_i$).
+  - *Defect independence:* Evaluated with lower-bound sensitivity breakdown.
+  - *Weekly cyclostationarity:* Validated across 2,016 weekly 5-minute slots covering all 7 days.
+- **Known-answer checks:**
+  - *P-chart:* 3 days of 100 bikes with 5, 10, 15 due yields $\bar{p} = 0.10$, $UCL = 0.19$, $LCL = 0.01$ (verified in `bikesmart/tests/testthat/test-pchart.R`).
+  - *Failure factor:* 2% flat tire, 5% battery yields $0.98 \times 0.95 = 0.931$; 20 predicted bikes yields 18.62 usable (verified in `test-failure-factor.R`).
+  - *Dock projection:* 1.5 miles at 3 mph = 30 min walking time; arrival 08:30 (verified in `test-dock-projection.R`).
+
+---
+
+## 5. Delivery (Rubric: Working Tool 25)
+- **Stack:** 
+  1. Modular CRAN-style R package (`bikesmart/`) containing all pure statistical functions, `.Rd` manual pages, automated test suites, and Posit Connect documentation deployment.
+  2. Interactive React + Vite + Leaflet web application (`bikesmart-ui/`) with Node API server (`serve.mjs`), supporting real-time rider planning, street-routed fleet playback, and maintenance crew portal.
+- **Contract & Verification:**
+  - `bikesmart/testme.R` & `bikesmart/tests/test_all.R`: Runs full test suite in one command.
+  - `bikesmart/deployme.R`: Deploys documentation to Posit Connect server.
+  - `bikesmart-ui/`: Runs locally via `npm run dev` or `node server/serve.mjs` with Playwright browser verification.
+
+---
 
 ## 6. Outputs
-- **What the user sees:** FILL IN, a number, chart or pass/fail, with units and a one-line "how to read this".
-  Example: "a control chart with out-of-control points in red, plus 'stop the line: yes/no'"
+- **For Riders:** Distance-ranked eligible stations, arrival-time projected bike/space availability, 10%–20% rebalancing discount badges, and interactive map route.
+- **For Maintenance Crew:** Station visit ranking table sorted by docked due bikes ($n_{due}$) and overdue hours, stuck-bike alerts (>90 min away), and interactive P-chart with red out-of-control alarm points.
 
-## 7. Test datasets and codebook (rubric: demo 10, datasets 5, codebook 5)
-2-3 small CSVs in `data/`, invented but shaped like real field data, each showing one behavior.
-`data/README.md` is the codebook: every file, every column with units, and what it would take to
-collect this data for real.
-- **Datasets:** FILL IN. Example: "`in_control.csv`, `planted_shift.csv` (mean shifts at row 40), `edge_case.csv` (one subgroup)"
+---
 
-## 8. Documentation and reproducibility (rubric: docs 10, public repo 5)
-- `README.md` says what the tool does, for whom, every input and parameter, how to run it in one
-  command, and walks through the demo on each test dataset.
-- Public GitHub repo; a fresh clone runs `testme` and the tests pass with no extra steps.
-- Submit on Devpost: the repo link plus a demo.
+## 7. Test Datasets and Codebook (Rubric: Demo 10, Datasets 5, Codebook 5)
+- **Datasets in `data/`:**
+  1. `jersey_city`: 27 Citi Bike stations, 405 bikes, 8,640 five-minute snapshots across 30 days; transit hub dynamics.
+  2. `milwaukee`: 27 Bublr stations, 405 bikes, 8,640 five-minute snapshots; recreational lakefront and mixed zoning flows.
+  3. `tampa`: 27 downtown intersection stations, 405 bikes, 8,640 five-minute snapshots; grid street network.
+- **Maintenance Datasets:** `data/start_hours_jersey_city2.csv` (staggered 0–60 h baseline) and `data/service_log_jersey_city.csv` (405 service records).
+- **Codebooks:** Detailed variable definitions, units, and coordinate systems in `data/README.md` and `data/CODEBOOK.md`.
 
-## 9. Out of scope
-What we will NOT build, so nobody (human or agent) builds it by accident.
-- Default: logins, databases, real customer data, a second statistic before the first one is tested.
-- FILL IN, anything else. Example: "no forecasting; no multi-plant comparison"
+---
+
+## 8. Documentation and Reproducibility (Rubric: Docs 10, Public Repo 5)
+- Central documentation portal in `documentation/` with 6 detailed guides covering purpose, components, onboarding, test datasets, statistical foundations, and rubric alignment.
+- Public GitHub repository with clean history and zero hardcoded secrets.
+
+---
+
+## 9. Out of Scope
+- Global real-time cellular GPS hardware trackers on individual bikes.
+- Live credit card transaction processing.
+- Multi-city cross-transit fare payment integration.

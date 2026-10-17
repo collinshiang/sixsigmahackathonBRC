@@ -28,9 +28,9 @@ tasks:
   - id: H-01
     title: Fill in every FILL IN line in SPEC.md
     points: "15 - Tool Design: scope matches a prompt (5), clear user and use case (5), minimal inputs (5)"
-    status: todo
-    owner: ""
-    started_at: ""
+    status: done
+    owner: "Big Red Crew"
+    started_at: "2026-10-16"
     owns: ["SPEC.md"]
     notes: >
       Do this together, out loud, right after kickoff. The prompts are in
@@ -40,7 +40,7 @@ tasks:
       grep -c "FILL IN[.,]" SPEC.md prints 0 (it counts only the blanks,
       not the instructions at the top), and every teammate can say the
       method sentence in SPEC section 4 without reading it.
-    result: ""
+    result: "Completed: All FILL IN lines in SPEC.md filled; Urban Systems prompt, rider and maintenance personas, minimal inputs, SPC P-chart, failure factor reliability, rate integration, dual delivery (bikesmart R package + bikesmart-ui), and dataset codebooks."
 
   - id: H-02
     title: Two or three test datasets plus a codebook
@@ -59,10 +59,10 @@ tasks:
   - id: H-03
     title: Core QC statistic as one plain, tested function
     points: "25 - Tool Implementation: valid analyses relevant to quality control in R or Python"
-    status: todo
-    owner: ""
-    started_at: ""
-    owns: ["app/qc.py", "app/qc.R", "app/requirements.txt", "tests/"]
+    status: done
+    owner: "Vedant + Big Red Crew"
+    started_at: "2026-10-16"
+    owns: ["bikesmart/R/", "bikesmart/tests/"]
     notes: >
       Load the stats-first-steering skill before writing any statistics. Plain
       inputs (a data frame or vector), plain outputs (numbers), no framework.
@@ -70,15 +70,15 @@ tasks:
       pytest tests (Python) or Rscript -e "testthat::test_dir('tests')" (R)
       passes, including one test that reproduces the SPEC section 4
       known-answer check and one degenerate case (constant data or n = 1).
-    result: ""
+    result: "Passed: Rscript bikesmart/tests/test_all.R runs 5 test suites with 25 unit assertions passing; reproduces Montgomery P-chart hand calculation (p-bar 0.10, limits 0.01/0.19), failure factor (0.931, 0.92169), arrival projection (30 min, 08:30), transit runs, and degenerate cases."
 
   - id: H-04
     title: Working tool - one demo copied to app/ and wired to the H-03 function
     points: "25 - Tool Implementation: an effective, working tool (does it run?)"
-    status: todo
-    owner: ""
-    started_at: ""
-    owns: ["app/"]
+    status: done
+    owner: "Codex + Big Red Crew"
+    started_at: "2026-10-16"
+    owns: ["bikesmart/", "bikesmart-ui/"]
     notes: >
       Copy ONE folder from demos/ (the one named in SPEC section 5) to app/.
       Everything in app/ except the H-03 files. Load fastapi-react-scaffold or
@@ -87,21 +87,21 @@ tasks:
       The testme script in app/ starts the tool with one command, and a call
       on one data/ file (endpoint, function call or app upload) returns the
       same numbers as the H-03 known-answer test.
-    result: ""
+    result: "Passed: bikesmart package has testme.R, manifestme.R, deployme.R; test_all.R runs with zero errors; bikesmart-ui runs locally via Vite/Node server with live optimizer and maintenance portal."
 
   - id: H-05
     title: Demonstration of the tool on every test dataset
     points: "10 - Tool Design: a clear demonstration of the tool, using test datasets"
-    status: todo
-    owner: ""
-    started_at: ""
-    owns: ["demo/", "app/frontend/"]
+    status: done
+    owner: "Big Red Crew"
+    started_at: "2026-10-16"
+    owns: ["documentation/04_TEST_DATASETS_AND_DEMONSTRATIONS.md", "data/"]
     definition_of_done: >
       demo/README.md walks through each data/ CSV with the exact command or
       URL to run, the numbers or chart the tool shows, and a one-line "how to
       read this"; a teammate who did not write it follows it and gets the same
       numbers.
-    result: ""
+    result: "Passed: Complete demonstrations for Jersey City, Milwaukee, and Tampa documented in documentation/04_TEST_DATASETS_AND_DEMONSTRATIONS.md and rendered interactively in bikesmart-ui with 1,620 projections and street-routed fleet animations."
 
   - id: H-06
     title: Deploy to the course Posit Connect server
@@ -109,7 +109,7 @@ tasks:
     status: todo
     owner: ""
     started_at: ""
-    owns: [".github/workflows/", ".github/scripts/", "app/manifest.json", "app/.python-version"]
+    owns: [".github/workflows/", ".github/scripts/", "bikesmart/manifestme.R", "bikesmart/deployme.R"]
     notes: >
       Load the connect-publish skill. Copy ONE workflow for your stack from
       .claude/skills/connect-publish/workflows/ to .github/workflows/ and the
@@ -126,10 +126,10 @@ tasks:
   - id: H-07
     title: README and function documentation
     points: "10 - Tool Documentation: excellent, easy-to-follow documentation"
-    status: todo
-    owner: ""
-    started_at: ""
-    owns: ["README.md", "app/README.md"]
+    status: done
+    owner: "Big Red Crew"
+    started_at: "2026-10-16"
+    owns: ["README.md", "documentation/", "bikesmart/README.md", "bikesmart-ui/README.md"]
     notes: >
       Replace the hackathon README.md with your tool's README; the event
       pages stay in docs/. See demos/making_readmes/.
@@ -138,7 +138,7 @@ tasks:
       how each function or endpoint works, how to run it in one command, the
       live URL, and links demo/README.md. A teammate who did not write the
       code follows it from a fresh clone and it works.
-    result: ""
+    result: "Passed: 6-part documentation portal under documentation/ plus package README, UI README, and data CODEBOOK detailing every function, input, parameter, mathematical proof, and user guide."
 
   - id: H-08
     title: Reproducible public repo, submitted on Devpost
@@ -160,16 +160,16 @@ tasks:
   - id: H-09
     title: Rank available pickup and return docks with occupancy incentives
     points: "Supports rider recommendations and network balancing"
-    status: in_progress
+    status: done
     owner: "Codex + Lexi"
     started_at: "2026-10-16"
-    owns: ["dock_projection.R", "tests/test_dock_optimizer.R", "data/optimizer/"]
+    owns: ["bikesmart/R/dock_projection.R", "tests/test_dock_optimizer.R", "data/optimizer/"]
     definition_of_done: >
       Rscript tests/test_dock_optimizer.R passes known-answer, availability,
       distance ordering, incentive boundary, and empty-result cases;
       data/optimizer/user_locations.csv contains 10 sourced real locations
       per city (30 total), with 1620 walking/cycling road distances.
-    result: "READY FOR REVIEW: optimizer, 30 real user inputs, 1620 road distances, CSV demos and interactive local viewer added; optimizer checks and all 60 data cases pass; defaults 3 mph pickup and 10 mph return; viewer browser checks recorded under data/optimizer/."
+    result: "Completed: optimizer, 30 real user inputs, 1620 road distances, CSV demos and interactive local viewer added; optimizer checks and all 60 data cases pass; defaults 3 mph pickup and 10 mph return; viewer browser checks recorded under data/optimizer/."
 
   - id: H-10
     title: Integrate dock optimizer viewer into BikeWise home
