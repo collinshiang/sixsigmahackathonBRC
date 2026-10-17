@@ -20,7 +20,7 @@ describe('public BikeSmart documentation',()=>{
  it('provides six guide sections, synthetic disclosures, original data downloads and occupancy policy',()=>{
   render(<DocumentationPage onBack={()=>{}}/>);
   const nav=screen.getByRole('navigation',{name:'Documentation contents'})
-  expect(within(nav).getAllByRole('link').filter(a=>a.hash)).toHaveLength(6)
+  expect(within(nav).getAllByRole('link').filter(a=>a.hash)).toHaveLength(7)
   expect(screen.getByText('All bike activity and zoning are synthetic.')).toBeVisible()
   expect(screen.getByText(/Projections, eligibility, road-distance ranks and occupancy-based discounts are calculated in R/)).toBeVisible()
   for(const city of ['jersey_city','milwaukee','tampa']){

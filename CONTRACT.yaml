@@ -260,3 +260,29 @@ tasks:
       the existing synthetic data and guides; no old branding/path references remain
       in tracked text; maintenance data remains protected; R optimizer exports unchanged.
     result: "Completed: public six-section documentation, 24 original data/guide downloads, synthetic zoning disclosures and BikeSmart naming. Integrated a1bd57f cleanup with canonical package projection paths and retained pure replay helpers; original bike histories, ranks, eligibility and occupancy discounts preserved. Output: 34 UI tests passed; 3 public-boundary tests passed; 24 built downloads match originals; production browser 19 passed, 1 intentionally skipped service-journal mutation; ALL BIKESMART PACKAGE TESTS PASSED SUCCESSFULLY. All three city exports, production build and naming scans pass. User approved commit and push on 2026-10-17."
+
+  - id: H-16
+    title: Add contributor profiles to the public documentation page
+    status: done
+    owner: "Codex + Lexi"
+    started_at: "2026-10-17"
+    owns: ["bikesmart-ui/src/components/DocumentationPage.jsx", "bikesmart-ui/src/components/DocumentationPage.test.jsx", "bikesmart-ui/src/components/documentation.css", "bikesmart-ui/src/data/contributors.js", "bikesmart-ui/public/contributors/", "bikesmart-ui/tests/documentation.spec.js", "documentation/README.md", "documentation/CONTRIBUTORS.md"]
+    notes: "User supplied the five LinkedIn profiles and requested names, headshots and two-sentence descriptions. Use verified public biographical information; do not infer individual project roles or fabricate portraits. User subsequently supplied all five original photos with explicit mapping in attachment order: Vedant, Ally, Collin, Sophia, Alexis."
+    definition_of_done: >
+      UI unit tests and production build pass; documentation browser checks verify
+      all five contributor cards, LinkedIn links, readable mobile layout and locally
+      bundled headshots; each bio has two sentences and public source attribution.
+    result: "Completed: all five contributor names, supplied LinkedIn links, attributed two-sentence bios and original team-supplied headshots added. Photo bytes match supplied originals and production copies; circular framing uses CSS. Output: 34 UI tests passed; production build passed; 1440px and 390px browser checks verify five loaded local headshots, names, links and no horizontal overflow; no browser runtime errors. All 24 data/guide downloads match originals. User approved commit and push on 2026-10-17."
+
+  - id: H-17
+    title: Remove duplicate trip-mode controls from the rider home page
+    status: done
+    owner: "Codex + Lexi"
+    started_at: "2026-10-17"
+    owns: ["bikesmart-ui/src/components/OptimizerHome.jsx"]
+    notes: "User requested keeping the lower Rent a Bike / Return a Bike choices and removing the duplicate top icons from the user home page."
+    definition_of_done: >
+      UI tests and production build pass; browser checks verify one Rent a Bike
+      and one Return a Bike control on the home page at desktop and mobile sizes,
+      and both remaining controls open their respective planning flows.
+    result: "Completed: removed duplicate top trip-mode selector from the home screen; retained the lower Rent a Bike / Return a Bike cards with clear accessible names. Existing in-progress trip-mode switching remains available. Output: 34 UI tests passed; production build passed; 1440px and 390px browser checks confirm one lower control pair, no top selector, both complete journeys working and no runtime errors. User approved commit and push on 2026-10-17."

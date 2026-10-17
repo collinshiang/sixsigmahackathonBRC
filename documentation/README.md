@@ -4,6 +4,8 @@
 
 Welcome to the comprehensive documentation suite for **BikeSmart**, developed by the **Big Red Crew** for the **Cornell Six Sigma Hackathon (October 2026)**.
 
+Meet the team in [Contributors](CONTRIBUTORS.md), with two-sentence biographies, public profile sources, and team-supplied headshots. The rider documentation page also includes the contributor cards.
+
 ---
 
 ## 📑 Documentation Index
