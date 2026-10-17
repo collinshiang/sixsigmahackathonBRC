@@ -1,15 +1,17 @@
 # 06. Judging Rubric Alignment (100-Point Evaluation Matrix)
 
+> **Current demonstration:** BikeSmart retains R-package exports and occupancy-based return discounts (20% below 25% occupancy, 10% from 25% to below 50%, otherwise 0%). All bike activity, station capacities and zoning are synthetic; real locations do not imply measured ridership or verified land use. Rider results use a saved reference instant, not a live feed.
+
 > **Cornell Six Sigma Hackathon — Big Red Crew**  
-> Direct evidence mapping demonstrating full compliance with every criterion of the 100-point rubric.
+> Direct evidence mapping mapping intended evidence to each criterion of the 100-point rubric.
 
 ---
 
 ## Evaluation Rubric Matrix
 
-| Rubric Criterion | Max Pts | How BikeSmart Achieves Full Marks | Direct Evidence / File Reference |
+| Rubric Criterion | Max Pts | Intended supporting evidence | Direct Evidence / File Reference |
 |---|:---:|---|---|
-| **1. Effective, Working Tool** | **25** | The entire `bikesmart` R package builds, loads, and executes flawlessly. All 5 unit test suites pass with 0 errors. | `bikesmart/tests/test_all.R`, `buildme.R` |
+| **1. Effective, Working Tool** | **25** | The entire `bikesmart` R package builds, loads, and provides a standalone test runner. Rerun it to verify the current checkout. | `bikesmart/tests/test_all.R`, `buildme.R` |
 | **2. Performs Valid QC Analysis** | **25** | Implements Montgomery Attribute SPC P-charts with dynamic 3-sigma limits; failure-function rate integration (*SIGMA* Ch. 8); and Rolled Throughput Yield reliability modeling. | `pchart.R`, `dock_projection.R`, `failure_factor.R`, `05_STATISTICAL_FOUNDATIONS_AND_FORMULAS.md` |
 | **3. Scope Match** | **5** | Directly addresses the **Urban Systems** prompt: micro-mobility rebalancing, preventive maintenance routing, and system quality control. | `01_PROJECT_PURPOSE_AND_USERS.md`, `SPEC.md` |
 | **4. Clear Use Case** | **5** | Concrete user personas (commuters, maintenance van drivers, fleet quality managers) with specific decision workflows. | `01_PROJECT_PURPOSE_AND_USERS.md` |
@@ -19,7 +21,7 @@
 | **8. Test Datasets** | **5** | 3 complete, accurate urban test datasets (Jersey City, Milwaukee, Tampa) with 8,640 snapshots, road networks, zoning, and station coordinates. | `data/` (`jersey_city`, `milwaukee`, `tampa`) |
 | **9. Dataset Explainers** | **5** | Complete variable codebook, coordinate reference systems, timezone metadata, and OSM provenance documented in detail. | `04_TEST_DATASETS_AND_DEMONSTRATIONS.md`, `data/README.md`, `data/CODEBOOK.md` |
 | **10. Reproducibility** | **5** | 100% reproducible code with fixed seeds, clean directory structure, hosted on GitHub, with automated test scripts. | Public GitHub repository, `test_all.R`, `simulate_data.R` |
-| **TOTAL** | **100** | **Complete score alignment** | |
+| **TOTAL** | **100** | **Rubric mapping, not an awarded score** | |
 
 ---
 
@@ -44,6 +46,6 @@
 - The fleet manager only provides a raw CSV log of bike snapshots.
 
 ### 4. Reproducibility (5/5 pts)
-- All random processes (staggered starting hours, test simulation) use fixed seeds (`seed = 42`).
+- Random processes use fixed seeds: starting hours use seed 42; movement generation uses city-specific seeds 5301, 5302 and 5303.
 - Running the provided scripts reproduces identical figures, tables, and test passes.
 

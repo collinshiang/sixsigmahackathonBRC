@@ -1,6 +1,7 @@
 # Run all user locations at one shared instant across all three cities.
 # No network requests. Outputs are simulated recommendations, not live service.
-source("dock_projection.R")
+library(dplyr)
+source("bikesmart/R/dock_projection.R")
 locations <- read.csv("data/optimizer/user_locations.csv")
 all_recommendations <- list()
 all_exclusions <- list()

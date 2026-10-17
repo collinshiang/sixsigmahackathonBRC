@@ -79,7 +79,7 @@ def export(city):
             routes[f'{i}_{j}'] = dict(lats=[p[0] for p in clean], lons=[p[1] for p in clean],
                 n=len(clean), cumulative=[c / length for c in cumulative],
                 miles=length, matrix_miles=old, street_node_ids=chain)
-    output = ROOT / f'bike-wise-ui/server/data/fleet/{city}/streets.json'
+    output = ROOT / f'bikesmart-ui/server/data/fleet/{city}/streets.json'
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(dict(city=city, routes=routes, source='OpenStreetMap bicycle graph; data/prepare_networks.py',
         osm_timestamp=raw.get('osm3s', {}).get('timestamp_osm_base'), max_connector_miles=max_gap,

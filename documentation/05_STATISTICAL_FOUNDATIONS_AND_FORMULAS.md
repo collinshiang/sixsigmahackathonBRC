@@ -1,5 +1,7 @@
 # 05. Statistical Foundations & Mathematical Derivations
 
+> **Current demonstration:** BikeSmart retains R-package exports and occupancy-based return discounts (20% below 25% occupancy, 10% from 25% to below 50%, otherwise 0%). All bike activity, station capacities and zoning are synthetic; real locations do not imply measured ridership or verified land use. Rider results use a saved reference instant, not a live feed.
+
 > **Big Red Crew — BikeSmart Toolkit**  
 > Mapping directly to course textbook *SIGMA* (Fraser) and *Statistical Quality Control* (Montgomery).
 
@@ -83,8 +85,10 @@ $$\text{failure\_factor} = \prod_{i=1}^k (1 - r_i)$$
 Where $r_i$ is the observed or surveyed defect rate for category $i$.
 
 ### Independence Assumption
-- If defects are positively correlated (e.g., a crash causes both a bent rim and a flat tire), $\prod (1 - r_i)$ represents a conservative lower bound on usable fleet percentage.
-- If defects are negatively correlated / mutually exclusive, the factor provides a slight overestimate.
+The product is a model under independent defect categories. Correlated defects
+require joint information; do not present the independent product as a guaranteed
+bound or as measured fleet usability. Defect shares are hypothetical or supplied
+inputs, not estimates derived from the movement-only dataset.
 
 ---
 

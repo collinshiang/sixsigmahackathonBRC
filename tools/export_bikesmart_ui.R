@@ -21,11 +21,11 @@ if (!length(city_arg)) {
     metadata = outputs[[1]]$optimizer$metadata)
   stopifnot(length(combined$locations) == 30, length(combined$stations) == 81,
             length(combined$records) == 1620)
-  jsonlite::write_json(combined, "bike-wise-ui/src/data/optimizer.json", auto_unbox = TRUE,
+  jsonlite::write_json(combined, "bikesmart-ui/src/data/optimizer.json", auto_unbox = TRUE,
     na = "null", null = "null", digits = 15)
   if (!"--rider-only" %in% args) {
     reports <- lapply(outputs, function(x) x$maintenance[[1]])
-    jsonlite::write_json(reports, "bike-wise-ui/server/data/maintenance.json", auto_unbox = TRUE,
+    jsonlite::write_json(reports, "bikesmart-ui/server/data/maintenance.json", auto_unbox = TRUE,
       na = "null", null = "null", digits = 15)
   }
   cat(if ("--rider-only" %in% args) "PASS: 1620 rider projections generated from bikesmart\n" else "PASS: site data generated from bikesmart; 1620 rider projections and city-isolated maintenance reports\n")

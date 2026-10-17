@@ -1,5 +1,7 @@
 # 03. Applying BikeSmart to Another City: Data Requirements & Onboarding Guide
 
+> **Current demonstration:** BikeSmart retains R-package exports and occupancy-based return discounts (20% below 25% occupancy, 10% from 25% to below 50%, otherwise 0%). All bike activity, station capacities and zoning are synthetic; real locations do not imply measured ridership or verified land use. Rider results use a saved reference instant, not a live feed.
+
 > **Big Red Crew — BikeSmart Toolkit**
 
 This guide outlines the specifications, required data schemas, and validation protocols necessary to deploy **BikeSmart** to any new municipality or commercial bike-share system.

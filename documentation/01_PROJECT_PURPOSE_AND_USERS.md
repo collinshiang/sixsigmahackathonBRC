@@ -1,5 +1,7 @@
 # 01. Project Purpose, Prompt & Intended Users
 
+> **Current demonstration:** BikeSmart retains R-package exports and occupancy-based return discounts (20% below 25% occupancy, 10% from 25% to below 50%, otherwise 0%). All bike activity, station capacities and zoning are synthetic; real locations do not imply measured ridership or verified land use. Rider results use a saved reference instant, not a live feed.
+
 > **Cornell Six Sigma Hackathon — Big Red Crew (October 2026)**  
 > **Track:** On-Campus 24-Hour Sprint  
 > **Challenge Prompt:** Urban Systems — Micro-Mobility Fleet Rebalancing & Quality Control
@@ -56,7 +58,7 @@ BikeSmart is engineered with distinct user personas in mind, providing targeted 
   - Stolen or abandoned bikes remaining undetected for days.
 - **How BikeSmart Helps:**
   - **Ranked Station Service Priority:** Sorts stations by the number of docked bikes currently due for maintenance ($n_{due}$) and cumulative overdue hours.
-  - **Real-Time Stuck-Bike Alerts:** Detects bikes that have been away from any dock for $>90$ minutes, isolating genuine anomalies from normal commute trips.
+  - **Recorded In-Transit Alerts:** Detects bikes that have been away from any dock for $>90$ minutes, marking long trips for review without proving theft, damage or abandonment.
 
 ### Persona 3: System Operations & Quality Control Manager
 - **Profile:** Fleet director monitoring fleet health, maintenance contracts, and safety standards.
@@ -70,7 +72,7 @@ BikeSmart is engineered with distinct user personas in mind, providing targeted 
 ### Persona 4: Municipal Transport Planner / New City Operator
 - **Profile:** Urban transit authority seeking to deploy bike-share infrastructure in a new municipality.
 - **How BikeSmart Helps:**
-  - Provides a standardized onboarding protocol and validation suite requiring only standard GTFS/GBFS station coordinates and road distance matrices.
+  - Documents operator setup with station metadata, capacities, inventory history, road distances and timezone; this is not an automatic city-import interface.
 
 ---
 
@@ -79,12 +81,12 @@ BikeSmart is engineered with distinct user personas in mind, providing targeted 
 To satisfy the Six Sigma Hackathon rubric ("Requires a minimal, reasonable number of inputs or requirements from the user/customer"):
 
 1. **For Riders:**
-   - Only inputs: starting location (or current GPS), destination, and whether they want to pick up or return a bike.
-   - No complex statistical configurations required. Walking speeds (3 mph) and cycling speeds (10 mph) use verified defaults.
+   - Only inputs: a saved starting location, destination, and whether they want to pick up or return a bike.
+   - No complex statistical configurations required. Walking speeds (3 mph) and cycling speeds (10 mph) use illustrative defaults.
 2. **For Van Crews:**
    - One command: `dispatch_recommendation(data, service_interval_h = 60)`.
    - Returns a structured queue of where to drive and which bikes to service.
 3. **For Fleet Managers:**
    - Standard 3-column bike position logs (`BIKEID`, `DOCID`, `time`).
-   - Easily extracted from any commercial GBFS (General Bikeshare Feed Specification) operator stream.
+   - These require operator bike-level records; public GBFS station-count feeds alone cannot reconstruct persistent individual-bike histories.
 

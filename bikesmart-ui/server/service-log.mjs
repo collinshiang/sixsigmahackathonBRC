@@ -15,11 +15,11 @@ function calculate(root,city,records){
  })
 }
 export function createServiceLogStore(root){
- const filename=process.env.MAINTENANCE_SERVICE_LOG_FILE??path.join(root,'bike-wise-ui/server/data/service-log.json')
+ const filename=process.env.MAINTENANCE_SERVICE_LOG_FILE??path.join(root,'bikesmart-ui/server/data/service-log.json')
  const cache=new Map();let transaction=Promise.resolve()
- async function baseline(city){const all=JSON.parse(await readFile(path.join(root,'bike-wise-ui/server/data/maintenance.json'),'utf8'));return all[city]}
+ async function baseline(city){const all=JSON.parse(await readFile(path.join(root,'bikesmart-ui/server/data/maintenance.json'),'utf8'));return all[city]}
  async function read(){
-  const all=JSON.parse(await readFile(path.join(root,'bike-wise-ui/server/data/maintenance.json'),'utf8'))
+  const all=JSON.parse(await readFile(path.join(root,'bikesmart-ui/server/data/maintenance.json'),'utf8'))
   const seeds=Object.entries(all).flatMap(([city,base])=>(base.service_log??[]).map(row=>{
    const service_time=new Date(row.service_time).toISOString().replace(/\.\d{3}Z$/,'+0000')
    return{...row,city,service_time,id:createHash('sha256').update(`${city}/${row.BIKEID}/${service_time}`).digest('hex').slice(0,24),note:'Team-supplied simulated service record',source:'team_dataset'}

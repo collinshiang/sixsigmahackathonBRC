@@ -1,4 +1,4 @@
-# Applying BikeWise to another city
+# Applying BikeSmart to another city
 
 This guide describes the information a city/operator would supply, separately
 from what a rider would enter. It distinguishes the current simulator from

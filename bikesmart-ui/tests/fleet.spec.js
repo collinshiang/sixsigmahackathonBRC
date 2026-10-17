@@ -21,7 +21,7 @@ test('fleet_viz is the first maintenance view and its data requires login',async
  await expect(page.locator('[data-fleet-station]')).toHaveCount(27)
  await expect(page.getByLabel('All 405 bikes',{exact:true})).toBeChecked()
  const network=await page.request.get('/api/maintenance/fleet/network?city=jersey')
- expect((await network.json()).source).toBe('demo/fleet_viz/app.R')
+ expect((await network.json()).source).toBe('tools/fleet_replay_helpers.R')
  await page.screenshot({path:'test-results/fleet-landing.png',fullPage:true})
 })
 test('playback, outage highlights and station inspector match recorded snapshots',async({page})=>{

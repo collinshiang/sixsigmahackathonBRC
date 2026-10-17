@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parent
 
 def fetch(url, data=None):
     request = urllib.request.Request(url, data=data, headers={
-        "User-Agent": "BikeWise-hackathon-synthetic-data/1.0"})
+        "User-Agent": "BikeSmart-hackathon-synthetic-data/1.0"})
     for attempt in range(3):
         try:
             with urllib.request.urlopen(request, timeout=180) as response:

@@ -4,7 +4,7 @@ source("bikesmart/R/maintenance_qc.R")
 source("tools/bikesmart_maintenance_inputs.R")
 request <- fromJSON(file("stdin"))
 stopifnot(request$city %in% c("jersey_city", "milwaukee", "tampa"))
-base <- fromJSON("bike-wise-ui/server/data/maintenance.json")[[request$city]]
+base <- fromJSON("bikesmart-ui/server/data/maintenance.json")[[request$city]]
 status <- base$service_status
 if (is.null(status)) status <- base$service_due
 stopifnot(nrow(status) == base$fleet_size, !anyDuplicated(status$BIKEID))

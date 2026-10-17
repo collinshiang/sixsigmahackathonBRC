@@ -2,7 +2,7 @@
 const path=require('node:path');
 const assert=require('node:assert/strict');
 const {pathToFileURL}=require('node:url');
-const {chromium}=require(path.resolve(__dirname,'../../bike-wise-ui/node_modules/@playwright/test'));
+const {chromium}=require(path.resolve(__dirname,'../../bikesmart-ui/node_modules/@playwright/test'));
 
 (async()=>{
  const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});

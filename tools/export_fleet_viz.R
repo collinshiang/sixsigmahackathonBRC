@@ -14,17 +14,12 @@ if (!length(city_arg)) {
 stopifnot(length(city_arg) == 1, city_arg %in% c("jersey_city", "milwaukee", "tampa"))
 suppressPackageStartupMessages(library(dplyr))
 stopifnot(requireNamespace("jsonlite", quietly = TRUE))
-# Evaluate only reusable demo declarations: never load the Shiny UI or launch a server.
-allowed <- c("CAPACITY", "FLEET", "CITIES", "city_data_cache", "format_stations_payload",
-  "load_city_bundle", "format_trips_payload", "get_day_payload")
-for (expression in parse("demo/fleet_viz/app.R", encoding = "UTF-8")) {
-  if (is.call(expression) && identical(expression[[1]], as.name("<-")) &&
-      is.symbol(expression[[2]]) && as.character(expression[[2]]) %in% allowed) eval(expression)
-}
+# Load reusable helpers without the retired Shiny application.
+source("tools/fleet_replay_helpers.R")
 DATA_DIR <- normalizePath("data", winslash = "/")
 bundle <- load_city_bundle(city_arg)
 stopifnot(nrow(bundle$stations) == 27, length(bundle$all_bike_ids) == FLEET)
-streets <- jsonlite::read_json(file.path("bike-wise-ui/server/data/fleet", city_arg, "streets.json"), simplifyVector = TRUE)
+streets <- jsonlite::read_json(file.path("bikesmart-ui/server/data/fleet", city_arg, "streets.json"), simplifyVector = TRUE)
 street_names <- read.csv(file.path("data/stations", paste0(city_arg, ".csv")), stringsAsFactors = FALSE)$dockID
 for (pair in names(bundle$pair_to_route_idx)) {
   index <- bundle$pair_to_route_idx[[pair]]
@@ -39,7 +34,7 @@ for (pair in names(bundle$pair_to_route_idx)) {
   route$street_node_ids <- NULL
   bundle$route_list[[index + 1L]] <- route
 }
-output_dir <- file.path("bike-wise-ui/server/data/fleet", city_arg)
+output_dir <- file.path("bikesmart-ui/server/data/fleet", city_arg)
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 write_gzip <- function(value, name) {
   connection <- gzfile(file.path(output_dir, paste0(name, ".json.gz")), "wb")
@@ -84,7 +79,7 @@ meta <- bundle$meta[c("id", "name", "state", "lat", "lon", "zoom", "tz")]
 write_gzip(list(city = city_arg, meta = meta, capacity = CAPACITY, fleet_size = FLEET,
   dates = unname(days), default_date = if (length(full_days)) full_days[[1]] else names(days)[[1]],
   bike_ids = as.character(bundle$all_bike_ids), stations = bundle$stations_payload,
-  routes = bundle$route_list, source = "demo/fleet_viz/app.R",
+  routes = bundle$route_list, source = "tools/fleet_replay_helpers.R",
   route_source = streets$source, osm_timestamp = streets$osm_timestamp,
   max_matrix_difference_miles = streets$max_matrix_difference_miles,
   route_note = "Shortest bicycle street routes inferred from dock observations, not recorded GPS tracks."), "network")

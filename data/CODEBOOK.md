@@ -48,7 +48,7 @@ Present in `jersey_city/`, `milwaukee/`, and `tampa/`. 27 rows per file.
 | `dockID` | character | string | Station name matching `stations.csv`. |
 | `zone` | character | string | Functional land use: `residential`, `office`, or `retail`. |
 
-**Collection Background:** Categorized based on urban neighborhood characteristics. Used to model diurnal commuter movements (e.g., net morning departures from residential docks toward office docks).
+**Collection Background:** Synthetic assignments to equal residential, office and retail groups; not verified real land use. Used to model diurnal commuter movements (e.g., net morning departures from residential docks toward office docks).
 
 ---
 
@@ -71,7 +71,7 @@ Present in `jersey_city/`. 405 rows.
 | Column | Type | Units / Format | Description |
 |---|---|---|---|
 | `city` | character | string | City name (`jersey_city`, `milwaukee`, `tampa`). |
-| `location_id` | character | string | Unique origin ID (e.g. `JC-LOC01`, `MKE-LOC05`). |
+| `location_id` | character | string | Unique origin ID (e.g. `JC-U01`, `MKE-U05`). |
 | `name` | character | string | Real sourced address / landmark name. |
 | `lat`, `lon` | numeric | WGS84 decimal degrees | Coordinates of the user origin. |
 

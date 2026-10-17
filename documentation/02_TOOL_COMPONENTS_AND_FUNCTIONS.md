@@ -1,5 +1,7 @@
 # 02. Tool Components & Comprehensive Function Reference
 
+> **Current demonstration:** BikeSmart retains R-package exports and occupancy-based return discounts (20% below 25% occupancy, 10% from 25% to below 50%, otherwise 0%). All bike activity, station capacities and zoning are synthetic; real locations do not imply measured ridership or verified land use. Rider results use a saved reference instant, not a live feed.
+
 > **Big Red Crew — BikeSmart R Package**
 
 ---
@@ -94,7 +96,7 @@
 #### `optimize_docks(user_location, stations, rates, mode = c("pickup", "return"), now = Sys.time(), user_distances, travel_speed_mph = NULL, ...)`
 - **Purpose:** Evaluates all candidate stations from a user's starting point, filters out docks projected to fail (fewer than 1 available bike or slot at arrival), and returns viable docks ordered by shortest road network distance.
 - **Parameters:**
-  - `user_location`: Saved location ID (e.g. `"MKE-LOC01"`).
+  - `user_location`: Saved location ID (e.g. `"MKE-U01"`).
   - `stations`: Data frame with columns `dockID`, `live_bikes`, `capacity`.
   - `rates`: Output table from `compute_dock_rates()`.
   - `mode`: `"pickup"` (walking speed default: 3 mph) or `"return"` (cycling speed default: 10 mph).
@@ -166,11 +168,11 @@
 - **Return Value:** Data frame with `BIKEID`, `ride_hours`, `due` (TRUE/FALSE), `due_at` (timestamp when limit crossed), `current_dock` ("0" if currently ridden).
 
 #### `maintenance_alerts(data, threshold_min = 90, interval_min = 5)`
-- **Purpose:** Anomaly detection. Flags bikes away from docks ($DOCID == "0"$) continuously for $\ge 90$ minutes at the latest snapshot (99th percentile of real trip lengths is 80–85 minutes).
+- **Purpose:** Anomaly detection. Flags bikes away from docks ($DOCID == "0"$) continuously for $\ge 90$ minutes at the latest snapshot (80–85-minute tail percentiles were observed in earlier synthetic files, not measured real trips).
 - **Return Value:** Data frame with `BIKEID`, `duration_min`, `flagged`.
 
 #### `station_service_priority(data, service_interval_h, service_log = NULL, ...)`
-- **Purpose:** Optimizes mobile maintenance van routes. Groups docked due bikes by station and ranks stations with the most due bikes ($n_{due}$) first; ties broken by cumulative overdue hours.
+- **Purpose:** Prioritizes station visits; this does not optimize a complete van route. Groups docked due bikes by station and ranks stations with the most due bikes ($n_{due}$) first; ties broken by cumulative overdue hours.
 - **Return Value:** Data frame with `DOCID`, `n_bikes`, `n_due`, `overdue_hours`, `total_ride_hours`.
 
 #### `dispatch_recommendation(data, service_interval_h, threshold_min = 90, ...)`

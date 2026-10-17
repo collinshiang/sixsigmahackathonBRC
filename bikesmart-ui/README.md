@@ -12,7 +12,7 @@ layout, and the final page shows the user’s itinerary beside the map.
 ## Run locally
 
 ```sh
-cd bike-wise-ui
+cd bikesmart-ui
 npm ci
 npm run dev
 ```
@@ -64,13 +64,12 @@ the same map mounted; choosing a location updates its bounds.
 
 ## Data and assumptions
 
-`src/services/optimizer.js` reads the exported R results in
-`src/data/optimizer.json`. The source files are
-`data/optimizer/demo_recommendations.csv`, `demo_exclusions.csv`,
-`user_locations.csv`, and city station/zoning CSVs. The export contains 27 docks per city; the list shows up to five recommended eligible choices, with
-30 saved user locations, and 1,620 recorded results (60 input combinations).
-The old eight-station fixture results are not used in the guided journey;
-legacy service utilities remain isolated from the optimizer screen.
+`src/services/optimizer.js` reads `src/data/optimizer.json`, exported by
+`tools/export_bikesmart_ui.R` from the completed BikeSmart R package and saved
+movement history. It includes 27 docks per city, 30 sourced example locations
+and 1,620 recorded results. Legacy eight-station mocks are not used in the
+rider workflow. R exports and occupancy-based discounts remain authoritative.
+Zoning, capacities, bike activity and inventory are synthetic demonstration inputs.
 
 Each dock's arrival uses saved walking/cycling road distance at 3/10 mph.
 Return discounts are copied from R: occupancy below 25% earns 20%, 25% to
@@ -89,7 +88,7 @@ Refresh after rerunning the R optimizer demo, from the repository root:
 ```sh
 Rscript data/optimizer/run_demo.R
 python3 tools/export_optimizer_ui.py
-npm --prefix bike-wise-ui run build
+npm --prefix bikesmart-ui run build
 ```
 
 The export validates record counts/uniqueness without refitting the R model.
@@ -132,7 +131,7 @@ frontend build.
 
 The workspace supports all three cities:
 
-- **Fleet monitor (landing view):** recorded daily fleet playback from `demo/fleet_viz`, with date/time controls, speed, all-bike animation, single-bike history, empty/full highlights and a station inventory inspector. Cyan paths and navy bike markers render above the map; Play moves bikes smoothly between snapshots at the selected speed. Routes follow directed bicycle-accessible OpenStreetMap streets using the same graph filters and dock snapping as the distance matrices. They are inferred from dock observations, not GPS.
+- **Fleet monitor (landing view):** recorded daily fleet playback exported with `tools/fleet_replay_helpers.R`, with date/time controls, speed, all-bike animation, single-bike history, empty/full highlights and a station inventory inspector. Cyan paths and navy bike markers render above the map; Play moves bikes smoothly between snapshots at the selected speed. Routes follow directed bicycle-accessible OpenStreetMap streets using the same graph filters and dock snapping as the distance matrices. They are inferred from dock observations, not GPS.
 - **Service log:** record completed maintenance or import a CSV; saved service events update accumulated ride hours, the due queue and dispatch rankings through BikeSmart.
 - **Dispatch priorities:** package-ranked station visits by due bikes and overdue
   hours, a station map, and links to each station's service queue.
@@ -225,3 +224,36 @@ base-R assertions to run with the package's existing standalone test runner.
 The historical P-chart continues to use package `daily_service_counts` (60-hour
 cycle crossings), independently of the current due queue and assumed 70-hour
 servicing; it does not invent historical completion events.
+
+## Public documentation
+
+The rider header's **Documentation** button opens a public guide organized around
+the six guides in `documentation/`: purpose/users, tools, city onboarding,
+synthetic datasets, statistical foundations and reproducibility/rubric evidence.
+Opening and closing the page preserves the mounted rider planner and selections.
+Maintenance explanations are public; operational reports and journals remain
+behind the existing login.
+
+Synthetic 30-day CSV.gz/RDS downloads, station/distance/zoning CSVs, codebooks
+and full Markdown guides are served through an explicit public allowlist in
+`server/public-docs.mjs`. Vite serves them in development and includes identical
+assets in `dist/downloads/` at build time. There are no public maintenance-report
+or journal downloads. The extra build assets total about 46 MB. Source movement
+files, R exports, ranking, forecasting and occupancy discount logic are unchanged.
+
+Documentation verification:
+
+```sh
+npm --prefix bikesmart-ui test
+node --test bikesmart-ui/tests/public-docs.test.mjs
+npm --prefix bikesmart-ui run build
+node bikesmart-ui/tests/verify-public-downloads.mjs
+```
+
+The documentation browser checks are in `tests/documentation.spec.js`; they
+verify public access, original dataset download, rider-state preservation and
+mobile layout without needing maintenance credentials.
+
+The retired standalone Shiny demo is no longer needed to rebuild fleet playback.
+`tools/fleet_replay_helpers.R` retains its pure loading/trip helpers; the exporter
+uses those helpers and the existing street geometry without starting Shiny.

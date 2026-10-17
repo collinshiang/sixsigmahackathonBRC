@@ -82,7 +82,7 @@ export function createMaintenanceApi(){
     const network=url.pathname.endsWith('/network')
     if(!network&&(!day||!/^\d{4}-\d{2}-\d{2}$/.test(day)))return send(400,{error:'Choose an available replay date.'})
     let data
-    try{data=await readFile(path.join(root,'bike-wise-ui/server/data/fleet',city,`${network?'network':day}.json.gz`))}
+    try{data=await readFile(path.join(root,'bikesmart-ui/server/data/fleet',city,`${network?'network':day}.json.gz`))}
     catch{return send(404,{error:'Replay data is not available for this date. Refresh the fleet export or choose another date.'})}
     res.statusCode=200;res.setHeader('Content-Type','application/json');res.setHeader('Content-Encoding','gzip');res.end(data);return
    }

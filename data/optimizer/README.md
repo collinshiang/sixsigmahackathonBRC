@@ -1,10 +1,9 @@
 # Dock recommendation inputs and examples
 
-`optimize_docks()` in `dock_projection.R` ranks eligible docks by shortest
+`optimize_docks()` in `bikesmart/R/dock_projection.R` ranks eligible docks by shortest
 mode-specific road/path distance from a saved user location. This is a transparent
 distance-ranking rule, not a global fleet or truck-route optimization algorithm.
-Sourcing the R file now loads functions without running historical examples or plots;
-running it directly retains the existing Milwaukee analysis.
+The package projection file loads plain functions without running historical plots.
 
 ## Saved real user locations
 
@@ -41,7 +40,8 @@ Source: © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright)
 ## R function inputs and rules
 
 ```r
-source("dock_projection.R")
+library(dplyr)
+source("bikesmart/R/dock_projection.R")
 locations <- read.csv("data/optimizer/user_locations.csv")
 locations[locations$city == "milwaukee", ]
 ```
@@ -83,7 +83,8 @@ Missing historical predictions raise a clear error rather than becoming zero.
 ## Example using a recorded snapshot
 
 ```r
-source("dock_projection.R")
+library(dplyr)
+source("bikesmart/R/dock_projection.R")
 history <- readRDS("data/milwaukee.rds")
 now <- as.POSIXct("2026-10-15 23:55:00", tz = "America/New_York")
 stations <- read.csv("data/stations/milwaukee.csv")
@@ -151,7 +152,7 @@ python3 data/optimizer/build_viewer.py
 
 Source is `viewer_template.html`; generated output is `viewer/index.html`.
 Leaflet assets and their license are included in `viewer/vendor/`. The builder
-can initially copy them from the existing `bike-wise-ui/node_modules/leaflet`
+can initially copy them from the existing `bikesmart-ui/node_modules/leaflet`
 installation; once included, no npm dependency is needed to open or rebuild
 the page. Cached road extracts are needed to embed the offline street outlines.
 

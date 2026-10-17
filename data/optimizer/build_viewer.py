@@ -9,13 +9,13 @@ OUT = ROOT / "viewer"
 OUT.mkdir(exist_ok=True)
 VENDOR = OUT / "vendor"
 VENDOR.mkdir(exist_ok=True)
-leaflet = ROOT.parents[1] / "bike-wise-ui/node_modules/leaflet"
+leaflet = ROOT.parents[1] / "bikesmart-ui/node_modules/leaflet"
 for source, target in [("dist/leaflet.js", "leaflet.js"),
                        ("dist/leaflet.css", "leaflet.css"), ("LICENSE", "LEAFLET-LICENSE")]:
     dest = VENDOR / target
     if not dest.exists():
         if not (leaflet / source).exists():
-            raise SystemExit("Leaflet assets missing: run npm ci inside bike-wise-ui first")
+            raise SystemExit("Leaflet assets missing: run npm ci inside bikesmart-ui first")
         shutil.copyfile(leaflet / source, dest)
 
 def read(name):

@@ -1,4 +1,4 @@
-# BikeWise: three-column synthetic bike snapshots. Run from repository root:
+# BikeSmart: three-column synthetic bike snapshots. Run from repository root:
 # Rscript simulate_data.R
 # Source this file to use simulate_bikes() without writing output.
 

@@ -1,5 +1,7 @@
 # 04. Test Datasets, Codebook & Quality Control Demonstrations
 
+> **Current demonstration:** BikeSmart retains R-package exports and occupancy-based return discounts (20% below 25% occupancy, 10% from 25% to below 50%, otherwise 0%). All bike activity, station capacities and zoning are synthetic; real locations do not imply measured ridership or verified land use. Rider results use a saved reference instant, not a live feed.
+
 > **Big Red Crew — BikeSmart Toolkit**
 
 This document describes the three accurate test datasets that accompany **BikeSmart**, their provenance, codebooks, and how they demonstrate every quality control feature in the package.
@@ -71,7 +73,7 @@ The test datasets are specifically engineered to demonstrate the four statistica
 - **Observation:** In the morning (07:00–09:00), net docking rates at residential docks drop negative (heavy departures), while office docks show sharp positive rates (+15 to +20 bikes/hr).
 - **Tool Demonstration:** 
   - `compute_dock_rates()` accurately captures the diurnal cycle.
-  - `predict_dock()` prevents riders from walking to a residential dock that will be depleted by the time they arrive.
+  - `predict_dock()` estimates arrival inventory; it cannot guarantee availability or prevent a stockout.
   - `return_discount()` triggers a 20% discount for riders returning bikes to depleted residential stations during evening return flows.
 
 ### 2. P-Chart In-Control vs. Out-of-Control Demonstration
@@ -80,9 +82,9 @@ The test datasets are specifically engineered to demonstrate the four statistica
 
 ### 3. Maintenance Logistics & Van Stop Optimization Demonstration
 - **Observation:** Across 27 stations, docked bikes needing service are unevenly distributed: certain high-traffic hubs accumulate 4–6 overdue bikes, while outlying docks have 0.
-- **Tool Demonstration:** `station_service_priority()` ranks hubs at the top of the queue, allowing the maintenance van to service 80% of overdue bikes in just 3 station stops.
+- **Tool Demonstration:** `station_service_priority()` ranks hubs at the top of the queue, so a crew can review high-priority stops. Any claimed coverage percentage must be calculated for the specific report; no general 80%-in-three-stops result is established here.
 
 ### 4. Anomaly Detection for Stuck / Stolen Bikes
-- **Observation:** Normal trip durations have a median of 15 minutes and a 99th percentile of 80–85 minutes.
-- **Tool Demonstration:** `maintenance_alerts(threshold_min = 90)` isolates bikes still undocked past 90 minutes, allowing operators to immediately dispatch recovery crews.
+- **Observation:** Earlier synthetic trip durations had a median of 15 minutes and a 99th percentile of 80–85 minutes.
+- **Tool Demonstration:** `maintenance_alerts(threshold_min = 90)` isolates bikes still undocked past 90 minutes, for operator investigation; long trips also occur naturally in the simulator.
 
