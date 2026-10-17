@@ -1,4 +1,4 @@
-# SPEC: Six Sigma Hackathon team project
+# SPEC: Six Sigma Hackathon team project 
 
 What your tool IS. Your agent reads this before every task. Where the code and this file
 disagree, the code is the bug: change this file first, then the code.
